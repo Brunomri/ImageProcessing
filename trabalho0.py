@@ -23,3 +23,8 @@ k = cv.waitKey(0)
 imgNeg = cv.bitwise_not(img)
 cv.imshow("Negativo", imgNeg)
 k = cv.waitKey(0)
+
+# c) Espelhamento vertical
+imgFlip = cv.flip(img,0)
+cv.imshow("Espelhamento vertical", imgFlip)
+k = cv.waitKey(0)
