@@ -8,8 +8,21 @@ import numpy as np
 from matplotlib import pyplot as plt
 import sys
 
-print(cv.__version__)
-print(skimage.__version__)
+# print(cv.__version__)
+# print(skimage.__version__)
+
+# Funcoes auxiliares
+# exibir: exibe a imagem em uma janela e a salva em um arquivo se o usuario entrar "s", senão
+# apenas continua a execucao
+def exibir(janela,img,saida):
+    cv.imshow(janela, img)
+    k = cv.waitKey(0) & 0xFF
+
+    if k == ord("s"):
+        cv.imwrite(saida, img)
+
+    cv.destroyWindow(janela)
+
 
 # 1.1 Transformacao de intensidade
 # a) Imagem original
@@ -25,23 +38,11 @@ k = cv.waitKey(0) & 0xFF
 
 # b) Negativo da imagem
 imgNeg = cv.bitwise_not(img)
-cv.imshow("Negativo", imgNeg)
-k = cv.waitKey(0) & 0xFF
-
-if k == ord("s"):
-    cv.imwrite("city1_1b.png", imgNeg)
-
-cv.destroyWindow("Negativo")
+exibir("Negativo",imgNeg,"city1_1b")
 
 # c) Espelhamento vertical
 imgFlip = cv.flip(img,0)
-cv.imshow("Espelhamento vertical", imgFlip)
-k = cv.waitKey(0) & 0xFF
-
-if k == ord("s"):
-    cv.imwrite("city1_1c.png", imgFlip)
-
-cv.destroyWindow("Espelhamento vertical")
+exibir("Espelhamento vertical",imgFlip,"city1_1c")
 
 # d) Imagem transformada
 print(img[0,0])
@@ -56,13 +57,7 @@ for i in range(rows):
         v = ((100*f)/255)+100
         g.itemset((i,j),v)
 
-cv.imshow("Imagem transformada", g)
-k = cv.waitKey(0) & 0xFF
-
-if k == ord("s"):
-    cv.imwrite("city1_1d.png", g)
-
-cv.destroyWindow("Imagem transformada")
+exibir("Imagem transformada",g,"city1_1c")
 
 # e) Linhas pares invertidas
 
