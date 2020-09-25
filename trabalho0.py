@@ -24,7 +24,17 @@ imgNeg = cv.bitwise_not(img)
 cv.imshow("Negativo", imgNeg)
 k = cv.waitKey(0)
 
+if k == ord("s"):
+    cv.imwrite("city1_1.png", imgNeg)
+
 # c) Espelhamento vertical
 imgFlip = cv.flip(img,0)
 cv.imshow("Espelhamento vertical", imgFlip)
 k = cv.waitKey(0)
+
+if k == ord("s"):
+    cv.imwrite("city1_2.png", imgFlip)
+
+# d) Imagem transformada
+
+# e) Linhas pares invertidas
