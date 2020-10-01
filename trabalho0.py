@@ -74,4 +74,13 @@ for p in range(rows):
 
 exibir("Linhas pares invertidas",h,"city1_1e.png")
 
+# f) Reflexao de linhas
+i = img.copy()
+
+for p in range(rows//2):
+    r = i[p]
+    i[rows-p-1] = r
+
+exibir("Reflexao de linhas",i,"city1_1f.png") 
+
 cv.destroyAllWindows()
