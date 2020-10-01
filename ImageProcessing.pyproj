@@ -4,13 +4,17 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>34ec72ee-f195-4c00-ae2c-1d9c700af4b8</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ImageProcessing.py</StartupFile>
+    <StartupFile>Trabalho0\trabalho0.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>ImageProcessing</Name>
     <RootNamespace>ImageProcessing</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments>Trabalho0\city.png 1</CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +25,20 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ImageProcessing.py" />
+    <Compile Include="Trabalho0\trabalho0.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Trabalho0\modulo1.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Trabalho0\baboon.png" />
+    <Content Include="Trabalho0\butterfly.png" />
+    <Content Include="Trabalho0\city.png" />
+    <Content Include="Trabalho0\house.png" />
+    <Content Include="Trabalho0\seagull.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Trabalho0\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
