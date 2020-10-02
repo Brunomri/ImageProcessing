@@ -22,9 +22,6 @@ def questao1(img):
 
 
     # d) Imagem transformada
-    print(img[0,0])
-    print(img.shape)
-
     rows,cols = img.shape
     g = img.copy()
 
