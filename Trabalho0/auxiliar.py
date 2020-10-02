@@ -18,8 +18,15 @@ def exibir(janela,img,saida):
 def correcaoGamma(img, gamma=1.0):
     invGamma = 1.0 / gamma
     # Utiliza uma tabela para mapear cada pixel e seu valor corrigido
-    # permitindo execucao em tempo O(1)
     tabela = np.array([((i/255.0) ** invGamma) * 255
                        for i in np.arange(0,256)]).astype("uint8")
 
     return cv.LUT(img,tabela)
+
+# getPlano: cria uma máscara para obter um determinado plano de bits de uma imagem
+def getPlano(img, plano):
+    plano = np.full((img.shape[0], img.shape[1]), 2 ** plano, np.uint8)
+    t = cv.bitwise_and(plano, img)
+    # Aumentar a intensidade dos pixels
+    r = t * 255
+    return r
