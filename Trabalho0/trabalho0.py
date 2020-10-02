@@ -5,7 +5,7 @@
 # RA: 157743
 
 import cv2 as cv
-import sys, modulo1 as m1, modulo2 as m2, modulo3 as m3
+import sys, modulo1 as m1, modulo2 as m2, modulo3 as m3, modulo4 as m4
 
 if len(sys.argv) != 3:
     print("Uso: trabalho0.py <imagem.png> <questao>")
@@ -32,5 +32,6 @@ else:
         print("Questao 3")
     elif questao == "4":
         print("Questao 4")
+        m4.questao4(img)
     else:
         print("Questao 5")
