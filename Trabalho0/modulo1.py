@@ -1,29 +1,11 @@
 # Processamento de imagens
 # Trabalho 0
+# 1.1 Transformacao de intensidade
 
-# Importar OpenCV, scikit-image, Numpy e Matplotlib
 import cv2 as cv
-import skimage
-import numpy as np
-from matplotlib import pyplot as plt
-import sys
+import sys, auxiliar as a
 
-# print(cv.__version__)
-# print(skimage.__version__)
-
-# Funcoes auxiliares
-
-# exibir: exibe a imagem em uma janela e a salva em um arquivo se o usuario entrar "s", senão
-# apenas continua a execucao
-def exibir(janela,img,saida):
-    cv.imshow(janela, img)
-    k = cv.waitKey(0) & 0xFF
-
-    if k == ord("s"):
-        cv.imwrite(saida, img)
-
-    cv.destroyWindow(janela)
-
+# Sequencia de processamentos do item 1.1
 def questao1(img):
 
     # 1.1 Transformacao de intensidade
@@ -37,12 +19,12 @@ def questao1(img):
 
     # b) Negativo da imagem
     imgNeg = cv.bitwise_not(img)
-    exibir("Negativo",imgNeg,"city1_1b.png")
+    a.exibir("Negativo",imgNeg,"city1_1b.png")
 
 
     # c) Espelhamento vertical
     imgFlip = cv.flip(img,0)
-    exibir("Espelhamento vertical",imgFlip,"city1_1c.png")
+    a.exibir("Espelhamento vertical",imgFlip,"city1_1c.png")
 
 
     # d) Imagem transformada
@@ -58,7 +40,7 @@ def questao1(img):
             v = ((100*f)/255)+100
             g.itemset((i,j),v)
 
-    exibir("Imagem transformada",g,"city1_1d.png")
+    a.exibir("Imagem transformada",g,"city1_1d.png")
 
 
     # e) Linhas pares invertidas
@@ -69,7 +51,7 @@ def questao1(img):
             r = h[p][::-1]
             h[p] = r
 
-    exibir("Linhas pares invertidas",h,"city1_1e.png")
+    a.exibir("Linhas pares invertidas",h,"city1_1e.png")
 
     # f) Reflexao de linhas
     i = img.copy()
@@ -78,6 +60,6 @@ def questao1(img):
         r = i[p]
         i[rows-p-1] = r
 
-    exibir("Reflexao de linhas",i,"city1_1f.png") 
+    a.exibir("Reflexao de linhas",i,"city1_1f.png") 
 
     cv.destroyAllWindows()
