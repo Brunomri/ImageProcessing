@@ -5,17 +5,11 @@
 import cv2 as cv
 import sys, auxiliar as a
 
-# Sequencia de processamentos do item 1.1
 def questao1(img):
 
-    # 1.1 Transformacao de intensidade
     # a) Imagem original
 
-    cv.imshow("Original", img)
-    k = cv.waitKey(0) & 0xFF
-
-    # cv.destroyWindow("Original")
-
+    a.exibir("Original",img,"original1.png")
 
     # b) Negativo da imagem
     imgNeg = cv.bitwise_not(img)
