@@ -9,7 +9,7 @@ import sys, auxiliar as a
 def questao3(img):
 
     # a) Imagem original
-    a.exibir("Original",img,"original2.png")
+    a.exibir("Original",img,"original3.png")
 
     # b) Plano de bit 0
     r = a.getPlano(img,0)

@@ -9,7 +9,7 @@ import sys, auxiliar as a
 def questao4(img):
 
     # a) Imagem original
-    a.exibir("Original",img,"original2.png")
+    a.exibir("Original",img,"original4.png")
 
     # b) ordem dos blocos
 

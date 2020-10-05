@@ -16,10 +16,10 @@ else:
         print("Insira uma questao de 1 a 5")
         sys.exit()
 
-    input = sys.argv[1]
+    inp = sys.argv[1]
     questao = sys.argv[2]
 
-    img = cv.imread(input, 0)
+    img = cv.imread(inp, 0)
 
     # Decide qual modulo sera executado de acordo com a entrada
     if img is None:
@@ -38,4 +38,8 @@ else:
         m4.questao4(img)
     else:
         print("Questao 5")
-        m5.questao5(img)
+        path = input("Digite o caminho da imagem que deseja mesclar:\n")
+        img2 = cv.imread(path, 0)
+        if img2 is None:
+            sys.exit("Nao foi possivel ler a imagem")
+        m5.questao5(img,img2)
