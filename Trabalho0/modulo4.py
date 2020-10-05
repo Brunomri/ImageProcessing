@@ -25,14 +25,14 @@ def questao4(img):
 
     # Dicionario t armazena os blocos da imagem original
     t = {}
-    r = np.full((img.shape[0],img.shape[1]), 0, np.uint8)
+    #r = np.full((4,4), 0, np.uint8)
 
     p = {1:6,2:11,3:13,4:3,
          5:8,6:16,7:1,8:9,
          9:12,10:14,11:2,12:7,
          13:4,14:15,15:10,16:5}
 
-    #print(p.values())
+    #print("Matriz r: ", r)
 
     contador = 0
     linha = 1
@@ -46,22 +46,37 @@ def questao4(img):
             #bloco = t.get(dest)
         linha += 3
 
-    print(contador)
+    blocos = []
+    for i in t:
+        print("i: ",i)
+        #a.exibir("Recorte",t[i],"teste.png")
+        dest = p.get(i)
+        print("Destino: ",dest)
+        bloco = t.get(dest)
+        #a.exibir("Recorte",bloco,"teste.png")
+        blocos.append(bloco)
+
+    print("No de blocos: ", len(blocos))
+
+    #teste = np.hstack((blocos[1],blocos[2]))
+    #a.exibir("Recorte",teste,"teste.png")
+
+    linhas = []
+    for b in range(0,15,4):
+        temp1 = np.hstack((blocos[b],blocos[b+1]))
+        temp2 = np.hstack((blocos[b+2],blocos[b+3]))
+        linha = np.hstack((temp1,temp2))
+        linhas.append(linha)
+        #a.exibir("Linhas",linha,"teste.png")
+
+    temp1 = np.vstack((linhas[0],linhas[1]))
+    temp2 = np.vstack((linhas[2],linhas[3]))
+    res = np.vstack((temp1,temp2))
+
+    #a.exibir("Recorte",l,"teste.png")
+    a.exibir("Recorte",res,"teste.png")
+
+    #print(contador)
     #print(p[2])
 
-    pos_x = 0
-    pos_y = 0
-    for x in range(r.shape[0]):
-        pos_x = x // 128
-        for y in range(r.shape[1]):
-            pos_y = y // 128
-            pos = pos_x + pos_y + 1
-            bloco = p[pos]
-            #print("\nBloco: ", bloco)
-            #a.exibir("Bloco",t[bloco],"teste.png")
-            for u in range((t[bloco]).shape[0]):
-                for v in range((t[bloco]).shape[1]):
-                    pixel = (t[bloco])[u,v]
-                    r.itemset((x,y),pixel)
-
-    a.exibir("Recorte",r,"teste.png")
+    #a.exibir("Recorte",r,"teste.png")
