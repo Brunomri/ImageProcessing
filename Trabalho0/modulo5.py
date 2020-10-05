@@ -18,18 +18,18 @@ def questao5(img, img2):
     alpha = 0.2
     beta = (1 - alpha)
     res = cv.addWeighted(img, alpha, img2, beta, 0.0)
-    a.exibir("0.2*A + 0.8*B", res, "comb1_5c")
+    a.exibir("0.2*A + 0.8*B", res, "comb1_5c.png")
 
     # d) Combinar 0.5*A + 0.5*B
     alpha = 0.5
     beta = (1 - alpha)
     res = cv.addWeighted(img, alpha, img2, beta, 0.0)
-    a.exibir("0.5*A + 0.5*B", res, "comb1_5d")
+    a.exibir("0.5*A + 0.5*B", res, "comb1_5d.png")
 
     # e) Combinar 0.8*A + 0.2*B
     alpha = 0.8
     beta = (1 - alpha)
     res = cv.addWeighted(img, alpha, img2, beta, 0.0)
-    a.exibir("0.8*A + 0.2*B", res, "comb1_5e")
+    a.exibir("0.8*A + 0.2*B", res, "comb1_5e.png")
 
     cv.destroyAllWindows()
