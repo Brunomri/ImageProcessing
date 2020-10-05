@@ -22,3 +22,5 @@ def questao3(img):
     # d) Plano de bit 7
     r = a.getPlano(img,7)
     a.exibir("Plano de bit 7",r,"baboon1_3d.png")
+
+    cv.destroyAllWindows()
