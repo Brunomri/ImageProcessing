@@ -31,3 +31,5 @@ def questao5(img, img2):
     beta = (1 - alpha)
     res = cv.addWeighted(img, alpha, img2, beta, 0.0)
     a.exibir("0.8*A + 0.2*B", res, "comb1_5e")
+
+    cv.destroyAllWindows()
