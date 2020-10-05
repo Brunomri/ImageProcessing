@@ -13,7 +13,7 @@
     <RootNamespace>ImageProcessing</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>Trabalho0\city.png 1</CommandLineArguments>
+    <CommandLineArguments>Trabalho0\baboon.png 5</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -25,6 +25,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Trabalho0\modulo5.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Trabalho0\trabalho0.py">
       <SubType>Code</SubType>
     </Compile>

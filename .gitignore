@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.pyproj
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -338,3 +339,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/teste.png
+/baboon1_4d.png
