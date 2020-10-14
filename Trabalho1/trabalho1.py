@@ -13,14 +13,18 @@ if len(sys.argv) != 2:
     sys.exit()
 else:
     inp = sys.argv[1]
-    print("Imagem: ", inp)
+    print("Imagem original: ", inp)
     img = cv.imread(inp, 0)
 
     # Decide qual filtro sera executado de acordo com a entrada
     if img is None:
         sys.exit("Nao foi possivel ler a imagem")
     else:
-        a.exibir("Original",img,"original.png",0)
-        h = a.criaFiltros(filtro)
-        res = cv.filter2D(img, -1, h)
-        a.exibir("{} ".format(filtro), res, "{}.png".format(filtro), 2)
+        a.exibir("Original",img,"{}".format(inp),0)
+
+        # Cria filtros conforme o enunciado, aplica-os as imagens
+        # e exibe os resultados utilizando funcoes auxiliares
+        filtros = a.criaFiltros()
+        a.aplicaFiltros(filtros, img, inp)
+
+        cv.destroyAllWindows()
