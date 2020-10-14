@@ -41,6 +41,7 @@
     <Content Include="Trabalho0\seagull.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Trabalho1\" />
     <Folder Include="Trabalho0\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
