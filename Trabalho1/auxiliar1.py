@@ -6,12 +6,18 @@ import numpy as np
 # exibir: exibe a imagem em uma janela e a salva em um arquivo se o usuario entrar "s", senão
 # apenas continua a execucao
 def exibir(janela,img,saida,close):
+    print("Exibindo {}".format(saida))
     cv.imshow(janela, img)
     k = cv.waitKey(0) & 0xFF
 
     if k == ord("s"):
+        print("Gerando arquivo {}".format(saida))
         cv.imwrite(saida, img)
 
+    print()
+
+    # Parametro close == 1 fecha apenas a janela selecionada
+    # Parametro close == 2 fecha todas as janelas
     if close == 1:
         cv.destroyWindow(janela)
     elif close == 2:
@@ -36,7 +42,9 @@ def getPlano(img, plano):
     r = t * 255
     return r
 
-def criaFiltros(filtro):
+# criaFiltros: cria as matrizes referentes aos filtros contidos no enunciado e
+# retorna um conjunto de tuplas com o nome de cada filtro e a matriz correspondente
+def criaFiltros():
     h1 = np.array((
         [0, 0, -1, 0, 0],
         [0, -1, -2, -1, 0],
@@ -49,7 +57,7 @@ def criaFiltros(filtro):
         [4, 16, 24, 16, 4],
         [6, 24, 36, 24, 6],
         [4, 16, 24, 16, 4],
-        [1, 4, 6, 4, 1]) / 256, dtype="float")
+        [1, 4, 6, 4, 1]), dtype="float") / 256
 
     h3 = np.array((
         [-1, 0, 1],
@@ -91,3 +99,28 @@ def criaFiltros(filtro):
         [-1, -1, 0],
         [-1, 0, 1],
         [0, 1, 1]), dtype="int")
+
+    filtros = (
+        ("h1",h1),
+        ("h2",h2),
+        ("h3",h3),
+        ("h4",h4),
+        ("h5",h5),
+        ("h6",h6),
+        ("h7",h7),
+        ("h8",h8),
+        ("h9",h9),
+        ("h10",h10),
+        ("h11",h11)
+        )
+
+    return filtros
+
+
+# aplicaFiltros: recebe um conjunto de filtros e os aplica em uma imagem, exibindo
+# o resultado em seguida
+def aplicaFiltros(filtros, img, nomeImg):
+    for (nomeFiltro, filtro) in filtros:
+        print("Aplicando filtro {}".format(nomeFiltro))
+        res = cv.filter2D(img, -1, filtro)
+        exibir("{} ".format(nomeFiltro), res, "{}_{}".format(nomeFiltro, nomeImg), 0)
