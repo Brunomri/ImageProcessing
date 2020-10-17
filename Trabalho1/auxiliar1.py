@@ -122,5 +122,7 @@ def criaFiltros():
 def aplicaFiltros(filtros, img, nomeImg):
     for (nomeFiltro, filtro) in filtros:
         print("Aplicando filtro {}".format(nomeFiltro))
-        res = cv.filter2D(img, -1, filtro)
+        #print("Filtro original\n", filtro)
+        #print("Filtro rotacionado\n", cv.flip(filtro, -1))
+        res = cv.filter2D(img, -1, cv.flip(filtro, -1), borderType = cv.BORDER_REPLICATE)
         exibir("{} ".format(nomeFiltro), res, "{}_{}".format(nomeFiltro, nomeImg), 0)
