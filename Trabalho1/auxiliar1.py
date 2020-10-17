@@ -116,6 +116,11 @@ def criaFiltros():
 
     return filtros
 
+# Conversao para garantir intervalo de intensidades entre um lower bound e um upper bound
+def intervalo(img, lb, ub):
+    img = np.clip(img * ub, lb, ub)
+    img = img.astype(np.uint8)
+    return img
 
 # aplicaFiltros: recebe um conjunto de filtros e os aplica em uma imagem, exibindo
 # o resultado em seguida
@@ -124,5 +129,46 @@ def aplicaFiltros(filtros, img, nomeImg):
         print("Aplicando filtro {}".format(nomeFiltro))
         #print("Filtro original\n", filtro)
         #print("Filtro rotacionado\n", cv.flip(filtro, -1))
+
+        # A funcao filter2d da biblioteca OpenCV de fato realiza uma operacao de correlacao e nao
+        # convolucao. Por isso, e preciso rotacionar a mascara do filtro em 180 graus para obter o resultado
+        # esperado quando a mascara nao e simetrica. A rotacao e feita por cv.flip com parametro -1 para
+        # rotacionar simultaneamente a matriz do filtro na horizontal e vertical. O parametro escolhido para
+        # o tratamento de bordas e a replicacao dos pixels
         res = cv.filter2D(img, -1, cv.flip(filtro, -1), borderType = cv.BORDER_REPLICATE)
         exibir("{} ".format(nomeFiltro), res, "{}_{}".format(nomeFiltro, nomeImg), 0)
+
+# combFiltros: aplica a combinacao de dois filtros em uma mesma imagem
+def combFiltros(filtros, f1, f2, img, nomeImg):
+    nomeF1, filtro1 = filtros[f1]
+    nomeF2, filtro2 = filtros[f2]
+    print("Aplicando composicao de filtros {} e {}".format(nomeF1, nomeF2))
+    #print("Filtro 1: ", nomeF1)
+    #print("Filtro 2: ", nomeF2)
+
+    # Aplica cada filtro individualmente e armazena o resultado em 2 variaveis
+    temp1 = cv.filter2D(img, -1, cv.flip(filtro1, -1), borderType = cv.BORDER_REPLICATE)
+    temp2 = cv.filter2D(img, -1, cv.flip(filtro2, -1), borderType = cv.BORDER_REPLICATE)
+
+    # Eleva a matriz resultado de cada filtro ao quadrado
+    temp3 = np.square(temp1)
+    #temp3 = intervalo(temp3, 0, 255)
+    #print("Temp3\n", temp3)
+    temp4 = np.square(temp2)
+    #temp4 = intervalo(temp4, 0, 255)
+    #print("Temp4\n", temp4)
+
+    # Soma as duas matrizes resultado de cada filtro
+    temp5 = np.add(temp3, temp4)
+    #temp5 = intervalo(temp5, 0, 255)
+    res = np.zeros((img.shape[0], img.shape[1]), dtype="float")
+
+    # Obtém o resultado final extraindo a raiz quadrada da soma anterior
+    np.sqrt(temp5, res)
+
+    # Conversao para garantir intervalo de intensidades entre 0 e 255
+    res = intervalo(res, 0, 255)
+
+    print(res)
+
+    exibir("{}_{}".format(nomeF1, nomeF2), res, "{}_{}_{}".format(nomeF1, nomeF2, nomeImg), 0)

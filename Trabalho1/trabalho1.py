@@ -26,5 +26,6 @@ else:
         # e exibe os resultados utilizando funcoes auxiliares
         filtros = a.criaFiltros()
         a.aplicaFiltros(filtros, img, inp)
+        a.combFiltros(filtros, 2, 3, img, inp)
 
         cv.destroyAllWindows()
