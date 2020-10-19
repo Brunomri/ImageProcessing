@@ -118,7 +118,7 @@ def criaFiltros():
 
 # Conversao para garantir intervalo de intensidades entre um lower bound e um upper bound
 def intervalo(img, lb, ub):
-    img = np.clip(img * ub, lb, ub)
+    img = np.clip(img, lb, ub)
     img = img.astype(np.uint8)
     return img
 
