@@ -169,6 +169,6 @@ def combFiltros(filtros, f1, f2, img, nomeImg):
     # Conversao para garantir intervalo de intensidades entre 0 e 255
     res = intervalo(res, 0, 255)
 
-    print(res)
+    #print(res)
 
     exibir("{}_{}".format(nomeF1, nomeF2), res, "{}_{}_{}".format(nomeF1, nomeF2, nomeImg), 0)
