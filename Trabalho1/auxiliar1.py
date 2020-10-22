@@ -151,17 +151,17 @@ def combFiltros(filtros, f1, f2, img, nomeImg):
     temp2 = cv.filter2D(img, -1, cv.flip(filtro2, -1), borderType = cv.BORDER_REPLICATE)
 
     # Eleva a matriz resultado de cada filtro ao quadrado
-    temp3 = np.square(temp1)
+    temp3 = np.square(temp1, dtype="float32")
     #temp3 = intervalo(temp3, 0, 255)
     #print("Temp3\n", temp3)
-    temp4 = np.square(temp2)
+    temp4 = np.square(temp2, dtype="float32")
     #temp4 = intervalo(temp4, 0, 255)
     #print("Temp4\n", temp4)
 
     # Soma as duas matrizes resultado de cada filtro
-    temp5 = np.add(temp3, temp4)
+    temp5 = np.add(temp3, temp4,dtype="float32")
     #temp5 = intervalo(temp5, 0, 255)
-    res = np.zeros((img.shape[0], img.shape[1]), dtype="float")
+    res = np.zeros((img.shape[0], img.shape[1]), dtype="float32")
 
     # Obtém o resultado final extraindo a raiz quadrada da soma anterior
     np.sqrt(temp5, res)
