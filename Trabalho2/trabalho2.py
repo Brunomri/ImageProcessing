@@ -22,9 +22,7 @@ else:
     else:
         a.exibir("Original", img, "{}".format(inp), 0)
 
-        b, g, r = cv.split(img)
-
-        r1 = a.fs(g)
+        r1 = a.fs(img)
         a.exibir("Floyd-Steinberg", r1, "{}".format(inp), 0)
         print("R1", r1)
 

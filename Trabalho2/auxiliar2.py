@@ -33,22 +33,30 @@ def intervalo(img, lb, ub):
 
 # Aplica a difusao de erro de Floyd-Steinberg em uma imagem f e gera o resultado em g.
 def fs(img):
-    m, n = img.shape
-    f = np.copy(img).astype("float")
-    g = np.copy(img)
+    b, g, r = cv.split(img)
+    ch = [b, g, r]
 
-    for x in range(m - 1):
-        print("F", f)
-        for y in range(n - 1):
-            if f[x, y] < 128:
-                g[x, y] = 0
-            else:
-                g[x, y] = 1
-            erro = f[x, y] - g[x, y] * 255
+    for cor in range(len(ch)):
+        m, n = ch[cor].shape
+        f = np.copy(ch[cor]).astype("float")
+        g = np.copy(ch[cor])
 
-            f[x + 1, y] = f[x + 1, y] + (7/16) * erro
-            f[x - 1, y + 1] = f[x - 1, y + 1] + (3/16) * erro
-            f[x, y + 1] = f[x, y + 1] + (5/16) * erro
-            f[x + 1, y + 1] = f[x + 1, y + 1] + (1/16) * erro
+        for x in range(m - 1):
+            for y in range(n - 1):
+                if f[x, y] < 128:
+                    g[x, y] = 0
+                else:
+                    g[x, y] = 1
+                erro = f[x, y] - g[x, y] * 255
 
-    return g * 255
+                f[x + 1, y]     = f[x + 1, y]     + (7/16) * erro
+                f[x - 1, y + 1] = f[x - 1, y + 1] + (3/16) * erro
+                f[x, y + 1]     = f[x, y + 1]     + (5/16) * erro
+                f[x + 1, y + 1] = f[x + 1, y + 1] + (1/16) * erro
+
+        ch[cor] = g
+        print("Cor", cor)
+
+    res = cv.merge(ch)
+
+    return res * 255
