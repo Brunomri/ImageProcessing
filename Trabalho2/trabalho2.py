@@ -46,7 +46,10 @@ else:
         #r8 = a.sierra_alt(img)
         #a.exibir("Sierra alternado", r8, "sierra_alt_{}".format(inp), 0)
 
-        r9 = a.sierra_alt(img)
-        a.exibir("Stucki", r9, "stucki_{}".format(inp), 0)
+        #r9 = a.stucki(img)
+        #a.exibir("Stucki", r9, "stucki_{}".format(inp), 0)
+
+        r10 = a.stucki_alt(img)
+        a.exibir("Stucki alternado", r10, "stucki_alt_{}".format(inp), 0)
 
         cv.destroyAllWindows()
