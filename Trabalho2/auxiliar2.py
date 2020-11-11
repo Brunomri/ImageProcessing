@@ -33,6 +33,7 @@ def intervalo(img, lb, ub):
 
 # Aplica a difusao de erro de Floyd-Steinberg para cada banda de uma imagem img e gera o resultado em res
 def fs(img):
+    print("Floyd-Steinberg\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -71,6 +72,7 @@ def fs(img):
 
 # Aplica a difusao de erro de Floyd-Steinberg com percurso alternado para cada banda de uma imagem img e gera o resultado em res
 def fs_alt(img):
+    print("Floyd-Steinberg alternado\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -121,6 +123,7 @@ def fs_alt(img):
 
 # Aplica a difusao de erro de Stevenson-Arce para cada banda de uma imagem img e gera o resultado em res
 def sa(img):
+    print("Stevenson-Arce\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -167,6 +170,7 @@ def sa(img):
 
 # Aplica a difusao de erro de Stevenson-Arce com percurso alternado para cada banda de uma imagem img e gera o resultado em res
 def sa_alt(img):
+    print("Stevenson-Arce alternado\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -233,6 +237,7 @@ def sa_alt(img):
 
 # Aplica a difusao de erro de Burkes para cada banda de uma imagem img e gera o resultado em res
 def burkes(img):
+    print("Burkes\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -275,6 +280,7 @@ def burkes(img):
 
 # Aplica a difusao de erro de Burkes com percurso alternado para cada banda de uma imagem img e gera o resultado em res
 def burkes_alt(img):
+    print("Burkes alternado\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -331,6 +337,7 @@ def burkes_alt(img):
 
 # Aplica a difusao de erro de Sierra para cada banda de uma imagem img e gera o resultado em res
 def sierra(img):
+    print("Sierra\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -375,6 +382,7 @@ def sierra(img):
 
 # Aplica a difusao de erro de Sierra com percurso alternado para cada banda de uma imagem img e gera o resultado em res
 def sierra_alt(img):
+    print("Sierra alternado\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -436,6 +444,7 @@ def sierra_alt(img):
 
 # Aplica a difusao de erro de Stucki para cada banda de uma imagem img e gera o resultado em res
 def stucki(img):
+    print("Stucki\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -482,6 +491,7 @@ def stucki(img):
 
 # Aplica a difusao de erro de Stucki com percurso alternado para cada banda de uma imagem img e gera o resultado em res
 def stucki_alt(img):
+    print("Stucki alternado\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -547,6 +557,7 @@ def stucki_alt(img):
 
 # Aplica a difusao de erro de Jarvis, Judice e Ninke para cada banda de uma imagem img e gera o resultado em res
 def jjn(img):
+    print("Jarvis-Judice-Ninke\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
@@ -593,6 +604,7 @@ def jjn(img):
 
 # Aplica a difusao de erro de Jarvis, Judice e Ninke com percurso alternado para cada banda de uma imagem img e gera o resultado em res
 def jjn_alt(img):
+    print("Jarvis-Judice-Ninke alternado\n")
     # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
