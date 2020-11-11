@@ -37,7 +37,10 @@ else:
         #r5 = a.burkes(img)
         #a.exibir("Burkes", r5, "burkes_{}".format(inp), 0)
 
-        r6 = a.burkes_alt(img)
-        a.exibir("Burkes alternado", r6, "burkes_alt_{}".format(inp), 0)
+        #r6 = a.burkes_alt(img)
+        #a.exibir("Burkes alternado", r6, "burkes_alt_{}".format(inp), 0)
+
+        r7 = a.sierra(img)
+        a.exibir("Sierra", r7, "sierra_{}".format(inp), 0)
 
         cv.destroyAllWindows()
