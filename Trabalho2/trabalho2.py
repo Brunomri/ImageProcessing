@@ -31,7 +31,7 @@ else:
         #r3 = a.sa(img)
         #a.exibir("Stevenson-Arce", r3, "sa_{}".format(inp), 0)
 
-        r4 = a.sa(img)
-        a.exibir("Stevenson-Arce", r4, "sa_{}".format(inp), 0)
+        r4 = a.sa_alt(img)
+        a.exibir("Stevenson-Arce alternado", r4, "sa_alt_{}".format(inp), 0)
 
         cv.destroyAllWindows()
