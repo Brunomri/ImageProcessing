@@ -272,3 +272,59 @@ def burkes(img):
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
+
+# Aplica a difusao de erro de Burkes para cada banda de uma imagem img e gera o resultado em res
+def burkes_alt(img):
+    # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
+    b, g, r = cv.split(img)
+    ch = [b, g, r]
+
+    # Percorre a lista de bandas de cor aplicando o algoritmo a cada uma delas
+    for cor in range(len(ch)):
+        m, n = ch[cor].shape
+        f = np.copy(ch[cor]).astype("float")
+        g = np.copy(ch[cor])
+
+        for x in range(m):
+            for y in range(n):
+                if f[x, y] < 128:
+                    g[x, y] = 0
+                else:
+                    g[x, y] = 1
+                erro = f[x, y] - g[x, y] * 255
+
+                # Verifica se uma linha e par ou impar para aplicar o percurso normal ou alternado
+                if x % 2 == 0:
+                    # Verificacao para evitar que a propagacao do erro ultrapasse as 
+                    # dimensoes da imagem
+                    if x < m - 2 and y < n - 2:
+                        # Propaga o erro aos vizinhos
+                        f[x + 1, y]     = f[x + 1, y]     + (8/32) * erro
+                        f[x + 2, y]     = f[x + 2, y]     + (4/32) * erro
+                        f[x - 2, y + 1] = f[x - 2, y + 1] + (2/32) * erro
+                        f[x - 1, y + 1] = f[x - 1, y + 1] + (4/32) * erro
+                        f[x, y + 1]     = f[x, y + 1]     + (8/32) * erro
+                        f[x + 1, y + 1] = f[x + 1, y + 1] + (4/32) * erro
+                        f[x + 2, y + 1] = f[x + 2, y + 1] + (2/32) * erro
+                else:
+                    # Verificacao para evitar que a propagacao do erro ultrapasse as 
+                    # dimensoes da imagem
+                    if x < m - 2 and y < n - 2:
+                        # Propaga o erro aos vizinhos
+                        f[x - 1, y]     = f[x - 1, y]     + (8/32) * erro
+                        f[x - 2, y]     = f[x - 2, y]     + (4/32) * erro
+                        f[x + 2, y + 1] = f[x + 2, y + 1] + (2/32) * erro
+                        f[x + 1, y + 1] = f[x + 1, y + 1] + (4/32) * erro
+                        f[x, y + 1]     = f[x, y + 1]     + (8/32) * erro
+                        f[x - 1, y + 1] = f[x - 1, y + 1] + (4/32) * erro
+                        f[x - 2, y + 1] = f[x - 2, y + 1] + (2/32) * erro
+
+
+        # Atualiza as bandas de cor apos o procedimento
+        ch[cor] = g
+    
+    # Mescla as bandas de cor para formar a imagem resultante
+    res = cv.merge(ch)
+
+    # Multiplica imagem resultante por 255 para permitir visualizacao
+    return res * 255
