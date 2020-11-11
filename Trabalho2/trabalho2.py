@@ -52,7 +52,10 @@ else:
         #r10 = a.stucki_alt(img)
         #a.exibir("Stucki alternado", r10, "stucki_alt_{}".format(inp), 0)
 
-        r11 = a.jjn(img)
-        a.exibir("Jarvis-Judice-Ninke", r11, "jjn_{}".format(inp), 0)
+        #r11 = a.jjn(img)
+        #a.exibir("Jarvis-Judice-Ninke", r11, "jjn_{}".format(inp), 0)
+
+        r12 = a.jjn_alt(img)
+        a.exibir("Jarvis-Judice-Ninke alternado", r12, "jjn_alt_{}".format(inp), 0)
 
         cv.destroyAllWindows()
