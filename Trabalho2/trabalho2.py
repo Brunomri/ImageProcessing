@@ -22,8 +22,10 @@ else:
     else:
         a.exibir("Original", img, "{}".format(inp), 0)
 
-        r1 = a.fs(img)
-        a.exibir("Floyd-Steinberg", r1, "{}".format(inp), 0)
-        #print("R1", r1)
+        #r1 = a.fs(img)
+        #a.exibir("Floyd-Steinberg", r1, "fs_{}".format(inp), 0)
+
+        r2 = a.fs_alt(img)
+        a.exibir("Floyd-Steinberg alternado", r2, "fs_alt_{}".format(inp), 0)
 
         cv.destroyAllWindows()
