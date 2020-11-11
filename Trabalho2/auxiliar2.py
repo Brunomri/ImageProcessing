@@ -31,32 +31,40 @@ def intervalo(img, lb, ub):
     img = img.astype(np.uint8)
     return img
 
-# Aplica a difusao de erro de Floyd-Steinberg em uma imagem f e gera o resultado em g.
+# Aplica a difusao de erro de Floyd-Steinberg para cada banda de uma imagem img e gera o resultado em res
 def fs(img):
+    # Divide a imagem em 3 bandas de cor e as adiciona em uma lista
     b, g, r = cv.split(img)
     ch = [b, g, r]
 
+    # Percorre a lista de bandas de cor aplicando o algoritmo a cada uma delas
     for cor in range(len(ch)):
         m, n = ch[cor].shape
         f = np.copy(ch[cor]).astype("float")
         g = np.copy(ch[cor])
 
-        for x in range(m - 1):
-            for y in range(n - 1):
+        for x in range(m):
+            for y in range(n):
                 if f[x, y] < 128:
                     g[x, y] = 0
                 else:
                     g[x, y] = 1
                 erro = f[x, y] - g[x, y] * 255
 
-                f[x + 1, y]     = f[x + 1, y]     + (7/16) * erro
-                f[x - 1, y + 1] = f[x - 1, y + 1] + (3/16) * erro
-                f[x, y + 1]     = f[x, y + 1]     + (5/16) * erro
-                f[x + 1, y + 1] = f[x + 1, y + 1] + (1/16) * erro
+                # Verificacao para evitar que a propagacao do erro ultrapasse as 
+                # dimensoes da imagem
+                if x < m - 1 and y < n - 1:
+                    # Propaga o erro aos vizinhos
+                    f[x + 1, y]     = f[x + 1, y]     + (7/16) * erro
+                    f[x - 1, y + 1] = f[x - 1, y + 1] + (3/16) * erro
+                    f[x, y + 1]     = f[x, y + 1]     + (5/16) * erro
+                    f[x + 1, y + 1] = f[x + 1, y + 1] + (1/16) * erro
 
+        # Atualiza as bandas de cor apos o procedimento
         ch[cor] = g
-        print("Cor", cor)
-
+    
+    # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
 
+    # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255

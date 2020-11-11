@@ -24,6 +24,6 @@ else:
 
         r1 = a.fs(img)
         a.exibir("Floyd-Steinberg", r1, "{}".format(inp), 0)
-        print("R1", r1)
+        #print("R1", r1)
 
         cv.destroyAllWindows()
