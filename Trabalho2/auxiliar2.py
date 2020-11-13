@@ -54,7 +54,7 @@ def fs(img):
 
                 # Verificacao para evitar que a propagacao do erro ultrapasse as 
                 # dimensoes da imagem
-                if x < m - 1 and y < n - 1:
+                if 0 < x < m - 1 and y < n - 1:
                     # Propaga o erro aos vizinhos
                     f[x + 1, y]     = f[x + 1, y]     + (7/16) * erro
                     f[x - 1, y + 1] = f[x - 1, y + 1] + (3/16) * erro
@@ -66,6 +66,7 @@ def fs(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -95,7 +96,7 @@ def fs_alt(img):
                 if x % 2 == 0:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 1 and y < n - 1:
+                    if 0 < x < m - 1 and y < n - 1:
                         # Propaga o erro aos vizinhos
                         f[x + 1, y]     = f[x + 1, y]     + (7/16) * erro
                         f[x - 1, y + 1] = f[x - 1, y + 1] + (3/16) * erro
@@ -105,7 +106,7 @@ def fs_alt(img):
                 else:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 1 and y < n - 1:
+                    if 0 < x < m - 1 and y < n - 1:
                         # Propaga o erro aos vizinhos
                         f[x - 1, y]     = f[x - 1, y]     + (7/16) * erro
                         f[x + 1, y + 1] = f[x + 1, y + 1] + (3/16) * erro
@@ -117,6 +118,7 @@ def fs_alt(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -144,7 +146,7 @@ def sa(img):
 
                 # Verificacao para evitar que a propagacao do erro ultrapasse as 
                 # dimensoes da imagem
-                if x < m - 3 and y < n - 3:
+                if 2 < x < m - 3 and y < n - 3:
                     # Propaga o erro aos vizinhos
                     f[x + 2, y]     = f[x + 2, y]     + (32/200) * erro
                     f[x - 3, y + 1] = f[x - 3, y + 1] + (12/200) * erro
@@ -164,6 +166,7 @@ def sa(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -193,7 +196,7 @@ def sa_alt(img):
                 if x % 2 == 0:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 3 and y < n - 3:
+                    if 2 < x < m - 3 and y < n - 3:
                         # Propaga o erro aos vizinhos
                         f[x + 2, y]     = f[x + 2, y]     + (32/200) * erro
                         f[x - 3, y + 1] = f[x - 3, y + 1] + (12/200) * erro
@@ -211,7 +214,7 @@ def sa_alt(img):
                 else:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 3 and y < n - 3:
+                    if 2 < x < m - 3 and y < n - 3:
                         # Propaga o erro aos vizinhos
                         f[x - 2, y]     = f[x - 2, y]     + (32/200) * erro
                         f[x + 3, y + 1] = f[x + 3, y + 1] + (12/200) * erro
@@ -231,6 +234,7 @@ def sa_alt(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -258,7 +262,7 @@ def burkes(img):
 
                 # Verificacao para evitar que a propagacao do erro ultrapasse as 
                 # dimensoes da imagem
-                if x < m - 2 and y < n - 1:
+                if 1 < x < m - 2 and y < n - 1:
                     # Propaga o erro aos vizinhos
                     f[x + 1, y]     = f[x + 1, y]     + (8/32) * erro
                     f[x + 2, y]     = f[x + 2, y]     + (4/32) * erro
@@ -274,6 +278,7 @@ def burkes(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -303,7 +308,7 @@ def burkes_alt(img):
                 if x % 2 == 0:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 2 and y < n - 1:
+                    if 1 < x < m - 2 and y < n - 1:
                         # Propaga o erro aos vizinhos
                         f[x + 1, y]     = f[x + 1, y]     + (8/32) * erro
                         f[x + 2, y]     = f[x + 2, y]     + (4/32) * erro
@@ -315,7 +320,7 @@ def burkes_alt(img):
                 else:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 2 and y < n - 1:
+                    if 1 < x < m - 2 and y < n - 1:
                         # Propaga o erro aos vizinhos
                         f[x - 1, y]     = f[x - 1, y]     + (8/32) * erro
                         f[x - 2, y]     = f[x - 2, y]     + (4/32) * erro
@@ -331,6 +336,7 @@ def burkes_alt(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -358,7 +364,7 @@ def sierra(img):
 
                 # Verificacao para evitar que a propagacao do erro ultrapasse as 
                 # dimensoes da imagem
-                if x < m - 2 and y < n - 2:
+                if 1 < x < m - 2 and y < n - 2:
                     # Propaga o erro aos vizinhos
                     f[x + 1, y]     = f[x + 1, y]     + (5/32) * erro
                     f[x + 2, y]     = f[x + 2, y]     + (3/32) * erro
@@ -376,6 +382,7 @@ def sierra(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -405,7 +412,7 @@ def sierra_alt(img):
                 if x % 2 == 0:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 2 and y < n - 2:
+                    if 1 < x < m - 2 and y < n - 2:
                         # Propaga o erro aos vizinhos
                         f[x + 1, y]     = f[x + 1, y]     + (5/32) * erro
                         f[x + 2, y]     = f[x + 2, y]     + (3/32) * erro
@@ -420,7 +427,7 @@ def sierra_alt(img):
                 else:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 2 and y < n - 2:
+                    if 1 < x < m - 2 and y < n - 2:
                         # Propaga o erro aos vizinhos
                         f[x - 1, y]     = f[x - 1, y]     + (5/32) * erro
                         f[x - 2, y]     = f[x - 2, y]     + (3/32) * erro
@@ -438,6 +445,7 @@ def sierra_alt(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -465,7 +473,7 @@ def stucki(img):
 
                 # Verificacao para evitar que a propagacao do erro ultrapasse as 
                 # dimensoes da imagem
-                if x < m - 2 and y < n - 2:
+                if 1 < x < m - 2 and y < n - 2:
                     # Propaga o erro aos vizinhos
                     f[x + 1, y]     = f[x + 1, y]     + (8/42) * erro
                     f[x + 2, y]     = f[x + 2, y]     + (4/42) * erro
@@ -485,6 +493,7 @@ def stucki(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -514,7 +523,7 @@ def stucki_alt(img):
                 if x % 2 == 0:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 2 and y < n - 2:
+                    if 1 < x < m - 2 and y < n - 2:
                         # Propaga o erro aos vizinhos
                         f[x + 1, y]     = f[x + 1, y]     + (8/42) * erro
                         f[x + 2, y]     = f[x + 2, y]     + (4/42) * erro
@@ -531,7 +540,7 @@ def stucki_alt(img):
                 else:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 2 and y < n - 2:
+                    if 1 < x < m - 2 and y < n - 2:
                         # Propaga o erro aos vizinhos
                         f[x - 1, y]     = f[x - 1, y]     + (8/42) * erro
                         f[x - 2, y]     = f[x - 2, y]     + (4/42) * erro
@@ -551,6 +560,7 @@ def stucki_alt(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -578,7 +588,7 @@ def jjn(img):
 
                 # Verificacao para evitar que a propagacao do erro ultrapasse as 
                 # dimensoes da imagem
-                if x < m - 2 and y < n - 2:
+                if 1 < x < m - 2 and y < n - 2:
                     # Propaga o erro aos vizinhos
                     f[x + 1, y]     = f[x + 1, y]     + (7/48) * erro
                     f[x + 2, y]     = f[x + 2, y]     + (5/48) * erro
@@ -598,6 +608,7 @@ def jjn(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
@@ -627,7 +638,7 @@ def jjn_alt(img):
                 if x % 2 == 0:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 2 and y < n - 2:
+                    if 1 < x < m - 2 and y < n - 2:
                         # Propaga o erro aos vizinhos
                         f[x + 1, y]     = f[x + 1, y]     + (7/48) * erro
                         f[x + 2, y]     = f[x + 2, y]     + (5/48) * erro
@@ -645,7 +656,7 @@ def jjn_alt(img):
                 else:
                     # Verificacao para evitar que a propagacao do erro ultrapasse as 
                     # dimensoes da imagem
-                    if x < m - 2 and y < n - 2:
+                    if 1 < x < m - 2 and y < n - 2:
                         # Propaga o erro aos vizinhos
                         f[x - 1, y]     = f[x - 1, y]     + (7/48) * erro
                         f[x - 2, y]     = f[x - 2, y]     + (5/48) * erro
@@ -665,6 +676,7 @@ def jjn_alt(img):
     
     # Mescla as bandas de cor para formar a imagem resultante
     res = cv.merge(ch)
+    print("Verificando imagem binária: {}\n".format(np.unique(res)))
 
     # Multiplica imagem resultante por 255 para permitir visualizacao
     return res * 255
