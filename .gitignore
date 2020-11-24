@@ -10,6 +10,8 @@
 *.userosscache
 *.sln.docstates
 *.pyproj
+*.pgm
+*.png
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -350,3 +352,23 @@ healthchecksdb
 /baboon1_2d.png
 /baboon1_2c.png
 /baboon1_2b.png
+/Trabalho2/fs_baboon.png
+/Trabalho2/baboon
+/Trabalho2/watch
+/house.png
+/h9_city.png
+/h8_city.png
+/h7_city.png
+/h6_city.png
+/h5_city.png
+/h4_city.png
+/h3_h4_city.png
+/h3_city.png
+/h2_city.png
+/h1_city.png
+/h11_city.png
+/h10_city.png
+/city.png
+/butterfly.png
+/baboon.png
+/seagull.png
