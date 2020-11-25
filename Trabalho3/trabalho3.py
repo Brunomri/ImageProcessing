@@ -6,6 +6,8 @@
 
 import cv2 as cv
 import sys, auxiliar3 as a
+#import skimage as sk
+#from skimage import io
 
 # Verifica se usuario forneceu os argumentos corretamente
 if len(sys.argv) != 2:
@@ -20,3 +22,4 @@ else:
         sys.exit("Nao foi possivel ler a imagem")
     else:
         a.exibir("Original", img, "{}".format(inp), 0)
+        a.histograma(img, "Original", "Intensidade", "Pixels")
