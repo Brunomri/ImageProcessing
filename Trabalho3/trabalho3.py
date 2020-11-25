@@ -1,5 +1,5 @@
 # Processamento de imagens
-# Trabalho 2
+# Trabalho 3
 
 # Aluno: Bruno Mendes Richau
 # RA: 157743
@@ -16,10 +16,11 @@ if len(sys.argv) != 2:
 else:
     inp = sys.argv[1]
     print("Imagem original: ", inp)
-    img = cv.imread(inp, 1)
+    img = cv.imread(inp, 0)
 
     if img is None:
         sys.exit("Nao foi possivel ler a imagem")
     else:
         a.exibir("Original", img, "{}".format(inp), 0)
-        a.histograma(img, "Original", "Intensidade", "Pixels")
+        a.histograma(img, titulo = "Original", rotulo_x = "Intensidade", rotulo_y = "Pixels")
+        a.otsu(img, inp)
