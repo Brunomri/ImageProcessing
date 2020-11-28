@@ -6,8 +6,6 @@
 
 import cv2 as cv
 import sys, auxiliar3 as a
-#import skimage as sk
-#from skimage import io
 
 # Verifica se usuario forneceu os argumentos corretamente
 if len(sys.argv) != 2:
@@ -24,3 +22,4 @@ else:
         a.exibir("Original", img, "{}".format(inp), 0)
         a.histograma(img, titulo = "Original", rotulo_x = "Intensidade", rotulo_y = "Pixels")
         a.otsu(img, inp)
+        a.bernsen(img, inp)
