@@ -300,3 +300,50 @@ def more(img, inp, t_janela = 15, k = 0.5, R = 128, p = 2, q = 10):
     # Exibe a imagem resultante e seu histograma
     exibir("Phansalskar, More e Sabale (W = {}, k = {})".format(t_janela, k), res, "more_w{}_k{}_{}".format(t_janela, k, inp), 0)
     histograma(res, titulo = "Phansalskar, More e Sabale (W = {}, k = {})".format(t_janela, k), rotulo_x = "Intensidade", rotulo_y = "Pixels")
+
+# get_contrast_thr: retorna o limiar de Metodo do Contraste para cada pixel da imagem de entrada utilizando 
+# o tamanho de janela fornecido
+def get_contrast_thr(img, t_janela = 15):
+
+    thr = np.zeros(img.shape)
+
+    # Tratamento de bordas com padding em funcao do tamanho da janela
+    hw_size = t_janela // 2
+    borda_img = np.ones((img.shape[0] + t_janela - 1,
+                          img.shape[1] + t_janela - 1)) * np.nan
+    borda_img[hw_size: -hw_size, hw_size: -hw_size] = img
+
+    # Obtem janelas do tamanho especificado
+    janelas = view_as_windows(borda_img, (t_janela, t_janela))
+
+    # Calcula o valor minimo e maximo em cada janela
+    minimos = np.nanmin(janelas, axis=(2, 3))
+    maximos = np.nanmax(janelas, axis=(2, 3))
+
+    # Calcula diferencas entre os pixels da imagem e o minimo e maximo de sua vizinhanca
+    min_dif = img - minimos
+    max_dif = maximos - img
+
+    # Define o limiar de acordo com a proximidade entre valor do pixel e o minimo
+    # ou maximo local
+    thr[min_dif <= max_dif] = 256
+    thr[min_dif > max_dif] = 0
+
+    return thr
+
+# contrast: aplica limiarizacao local do Metodo do Contraste com tamanho de janela
+# fornecido, exibindo a imagem resultante e seu histograma
+def contrast(img, inp, t_janela = 15):
+    print("Aplicando limiarizacao local do Metodo do Contraste em {}".format(inp))
+    print("Tamanho da janela = {} x {}".format(t_janela, t_janela))
+
+    # Chamada a funcao que calcula os limiares de cada pixel
+    thr = get_contrast_thr(img, t_janela)
+    print("Limiares = \n{}".format(thr))
+
+    # Atribui valor 255 aos pixels menores que o limiar (pixels brancos ao fundo)
+    res = ((img < thr) * 255).astype(np.uint8)
+
+    # Exibe a imagem resultante e seu histograma
+    exibir("Metodo do Contraste (W = {})".format(t_janela), res, "more_w{}_{}".format(t_janela, inp), 0)
+    histograma(res, titulo = "Metodo do Contraste (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")
