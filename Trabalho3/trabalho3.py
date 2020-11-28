@@ -24,3 +24,5 @@ else:
         a.otsu(img, inp)
         a.bernsen(img, inp)
         a.niblack(img, inp)
+        a.sauvola(img, inp, k = -0.35)
+        a.more(img, inp, k = -0.5)

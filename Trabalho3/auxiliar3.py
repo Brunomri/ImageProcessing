@@ -4,6 +4,7 @@ import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
 from skimage.util.shape import view_as_windows
+import math
 
 # exibir: exibe a imagem em uma janela e a salva em um arquivo se o usuario entrar "s", senão
 # apenas continua a execucao
@@ -52,8 +53,12 @@ def histograma(img, ch = 0, bins = 256, lb = 0, ub = 256, titulo = "", rotulo_x 
 # resultante e seu histograma
 def otsu(img, inp):
     print("Aplicando limiarizacao global de Otsu em {}".format(inp))
+
+    # Obtem o limiar global de Otsu e a imagem resultante
     thr,res = cv.threshold(img, 0, 255, cv.THRESH_BINARY_INV+cv.THRESH_OTSU)
     print("Limiar = {}".format(thr))
+
+    # Exibe a imagem resultante e seu histograma
     exibir("Otsu (T = {})".format(thr), res, "otsu_t{}_{}".format(thr, inp), 0)
     histograma(res, titulo = "Otsu (T = {})".format(thr), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
@@ -92,9 +97,15 @@ def get_bernsen_thr(img, t_janela = 15, ctr_thr = 30):
 def bernsen(img, inp, t_janela = 15, ctr_thr = 30):
     print("Aplicando limiarizacao local de Bensen em {}".format(inp))
     print("Tamanho da janela = {} x {}".format(t_janela, t_janela))
+
+    # Chamada a funcao que calcula os limiares de cada pixel
     thr = get_bernsen_thr(img, t_janela, ctr_thr)
     print("Limiares = \n{}".format(thr))
+
+    # Atribui valor 255 aos pixels menores que o limiar (pixels brancos ao fundo)
     res = ((img < thr) * 255).astype(np.uint8)
+
+    # Exibe a imagem resultante e seu histograma
     exibir("Bernsen (W = {})".format(t_janela), res, "bernsen_w{}_{}".format(t_janela, inp), 0)
     histograma(res, titulo = "Bernsen (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
@@ -128,17 +139,17 @@ def get_niblack_thr(img, t_janela = 15, k = -0.2):
     # Obter tamanho de areas locais
     l_size = (y2 - y1 + 1) * (x2 - x1 + 1)
 
-    # Calculando somas
+    # Calculando somas e somas ao quadrado para o calculo das medias e desvios padrao
     somas = (integ[y2, x2] - integ[y2, x1 - 1] -
             integ[y1 - 1, x2] + integ[y1 - 1, x1 - 1])
-    sqr_sums = (sqr_integral[y2, x2] - sqr_integral[y2, x1 - 1] -
+    somas_2 = (sqr_integral[y2, x2] - sqr_integral[y2, x1 - 1] -
                 sqr_integral[y1 - 1, x2] + sqr_integral[y1 - 1, x1 - 1])
 
     # Calculando medias locais
     medias = somas / l_size
 
     # Calculando desvios padrao locais
-    desvios = np.sqrt(sqr_sums / l_size - np.square(medias))
+    desvios = np.sqrt(somas_2 / l_size - np.square(medias))
 
     # Obtem valores de limiar para cada pixel
     thr = medias + k * desvios
@@ -150,8 +161,142 @@ def get_niblack_thr(img, t_janela = 15, k = -0.2):
 def niblack(img, inp, t_janela = 15, k = -0.2):
     print("Aplicando limiarizacao local de Niblack em {}".format(inp))
     print("Tamanho da janela = {} x {}".format(t_janela, t_janela))
+
+    # Chamada a funcao que calcula os limiares de cada pixel
     thr = get_niblack_thr(img, t_janela, k)
     print("Limiares = \n{}".format(thr))
+
+    # Atribui valor 255 aos pixels menores que o limiar (pixels brancos ao fundo)
     res = ((img < thr) * 255).astype(np.uint8)
+
+    # Exibe a imagem resultante e seu histograma
     exibir("Niblack (W = {}, k = {})".format(t_janela, k), res, "niblack_w{}_k{}_{}".format(t_janela, k, inp), 0)
     histograma(res, titulo = "Niblack (W = {}, k = {})".format(t_janela, k), rotulo_x = "Intensidade", rotulo_y = "Pixels")
+
+# get_sauvola_thr: retorna o limiar de Sauvola e Pietaksinen para cada pixel de uma imagem de entrada img de acordo
+# com o tamanho da janela e fator k fornecidos
+def get_sauvola_thr(img, t_janela = 15, k = 0.5, R = 128):
+
+    # Definindo numero de linhas e colunas da imagem
+    linhas, colunas = img.shape
+    i_rows, i_cols = linhas + 1, colunas + 1
+
+    # Utilizar imagens integrais para calcular media e desvio padrao
+    # Definindo primeira linha e coluna como zero por conveniencia
+    integ = np.zeros((i_rows, i_cols), np.float)
+    sqr_integral = np.zeros((i_rows, i_cols), np.float)
+
+    integ[1:, 1:] = np.cumsum(np.cumsum(img.astype(np.float), axis=0), axis=1)
+    sqr_img = np.square(img.astype(np.float))
+    sqr_integral[1:, 1:] = np.cumsum(np.cumsum(sqr_img, axis=0), axis=1)
+
+    # Definir grid
+    x, y = np.meshgrid(np.arange(1, i_cols), np.arange(1, i_rows))
+
+    # Obter coordenadas locais
+    hw_size = t_janela // 2
+    x1 = (x - hw_size).clip(1, colunas)
+    x2 = (x + hw_size).clip(1, colunas)
+    y1 = (y - hw_size).clip(1, linhas)
+    y2 = (y + hw_size).clip(1, linhas)
+
+    # Obter tamanho de areas locais
+    l_size = (y2 - y1 + 1) * (x2 - x1 + 1)
+
+    # Calculando somas e somas ao quadrado para o calculo das medias e desvios padrao
+    somas = (integ[y2, x2] - integ[y2, x1 - 1] -
+            integ[y1 - 1, x2] + integ[y1 - 1, x1 - 1])
+    somas_2 = (sqr_integral[y2, x2] - sqr_integral[y2, x1 - 1] -
+                sqr_integral[y1 - 1, x2] + sqr_integral[y1 - 1, x1 - 1])
+
+    # Calculando medias locais
+    medias = somas / l_size
+
+    # Calculando desvios padrao locais
+    desvios = np.sqrt(somas_2 / l_size - np.square(medias))
+
+    # Obtem valores de limiar para cada pixel
+    thr = medias * (1.0 + k * (desvios / R - 1.0))
+
+    return thr
+
+# sauvola: aplica limiarizacao local de Sauvola e Pietaksinen com tamanho de janela e 
+# fator k fornecidos, exibindo a imagem resultante e seu histograma
+def sauvola(img, inp, t_janela = 15, k = 0.5, R = 128):
+    print("Aplicando limiarizacao local de Sauvola e Pietaksinen em {}".format(inp))
+    print("Tamanho da janela = {} x {}".format(t_janela, t_janela))
+
+    # Chamada a funcao que calcula os limiares de cada pixel
+    thr = get_sauvola_thr(img, t_janela, k, R)
+    print("Limiares = \n{}".format(thr))
+
+    # Atribui valor 255 aos pixels menores que o limiar (pixels brancos ao fundo)
+    res = ((img < thr) * 255).astype(np.uint8)
+
+    # Exibe a imagem resultante e seu histograma
+    exibir("Sauvola e Pietaksinen (W = {}, k = {})".format(t_janela, k), res, "sauvola_w{}_k{}_{}".format(t_janela, k, inp), 0)
+    histograma(res, titulo = "Sauvola e Pietaksinen (W = {}, k = {})".format(t_janela, k), rotulo_x = "Intensidade", rotulo_y = "Pixels")
+
+# get_more_thr: retorna o limiar de Phansalskar, More e Sabale para cada pixel de uma imagem de entrada img de acordo
+# com o tamanho da janela e fator k fornecidos
+def get_more_thr(img, t_janela = 15, k = 0.25, R = 0.5, p = 2, q = 10):
+
+    # Definindo numero de linhas e colunas da imagem
+    linhas, colunas = img.shape
+    i_rows, i_cols = linhas + 1, colunas + 1
+
+    # Utilizar imagens integrais para calcular media e desvio padrao
+    # Definindo primeira linha e coluna como zero por conveniencia
+    integ = np.zeros((i_rows, i_cols), np.float)
+    sqr_integral = np.zeros((i_rows, i_cols), np.float)
+
+    integ[1:, 1:] = np.cumsum(np.cumsum(img.astype(np.float), axis=0), axis=1)
+    sqr_img = np.square(img.astype(np.float))
+    sqr_integral[1:, 1:] = np.cumsum(np.cumsum(sqr_img, axis=0), axis=1)
+
+    # Definir grid
+    x, y = np.meshgrid(np.arange(1, i_cols), np.arange(1, i_rows))
+
+    # Obter coordenadas locais
+    hw_size = t_janela // 2
+    x1 = (x - hw_size).clip(1, colunas)
+    x2 = (x + hw_size).clip(1, colunas)
+    y1 = (y - hw_size).clip(1, linhas)
+    y2 = (y + hw_size).clip(1, linhas)
+
+    # Obter tamanho de areas locais
+    l_size = (y2 - y1 + 1) * (x2 - x1 + 1)
+
+    # Calculando somas e somas ao quadrado para o calculo das medias e desvios padrao
+    somas = (integ[y2, x2] - integ[y2, x1 - 1] -
+            integ[y1 - 1, x2] + integ[y1 - 1, x1 - 1])
+    somas_2 = (sqr_integral[y2, x2] - sqr_integral[y2, x1 - 1] -
+                sqr_integral[y1 - 1, x2] + sqr_integral[y1 - 1, x1 - 1])
+
+    # Calculando medias locais
+    medias = somas / l_size
+
+    # Calculando desvios padrao locais
+    desvios = np.sqrt(somas_2 / l_size - np.square(medias))
+
+    # Obtem valores de limiar para cada pixel
+    thr = medias * (1.0 + p * np.power(math.e, (-q * medias)) + k * (desvios / R - 1.0))
+
+    return thr
+
+# more: aplica limiarizacao local de Phansalskar, More e Sabale com tamanho de janela e 
+# fator k fornecidos, exibindo a imagem resultante e seu histograma
+def more(img, inp, t_janela = 15, k = 0.5, R = 128, p = 2, q = 10):
+    print("Aplicando limiarizacao local de Sauvola e Pietaksinen em {}".format(inp))
+    print("Tamanho da janela = {} x {}".format(t_janela, t_janela))
+
+    # Chamada a funcao que calcula os limiares de cada pixel
+    thr = get_more_thr(img, t_janela, k, R, p, q)
+    print("Limiares = \n{}".format(thr))
+
+    # Atribui valor 255 aos pixels menores que o limiar (pixels brancos ao fundo)
+    res = ((img < thr) * 255).astype(np.uint8)
+
+    # Exibe a imagem resultante e seu histograma
+    exibir("Phansalskar, More e Sabale (W = {}, k = {})".format(t_janela, k), res, "more_w{}_k{}_{}".format(t_janela, k, inp), 0)
+    histograma(res, titulo = "Phansalskar, More e Sabale (W = {}, k = {})".format(t_janela, k), rotulo_x = "Intensidade", rotulo_y = "Pixels")
