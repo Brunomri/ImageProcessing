@@ -23,3 +23,4 @@ else:
         a.histograma(img, titulo = "Original", rotulo_x = "Intensidade", rotulo_y = "Pixels")
         a.otsu(img, inp)
         a.bernsen(img, inp)
+        a.niblack(img, inp)

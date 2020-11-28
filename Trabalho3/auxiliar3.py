@@ -54,8 +54,8 @@ def otsu(img, inp):
     print("Aplicando limiarizacao global de Otsu em {}".format(inp))
     thr,res = cv.threshold(img, 0, 255, cv.THRESH_BINARY_INV+cv.THRESH_OTSU)
     print("Limiar = {}".format(thr))
-    exibir("Otsu T = {}".format(thr), res, "otsu_t{}_{}".format(thr, inp), 0)
-    histograma(res, titulo = "Otsu T = {}".format(thr), rotulo_x = "Intensidade", rotulo_y = "Pixels")
+    exibir("Otsu (T = {})".format(thr), res, "otsu_t{}_{}".format(thr, inp), 0)
+    histograma(res, titulo = "Otsu (T = {})".format(thr), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
 # get_bernsen_thr: retorna o limiar de Bernsen para cada pixel de uma imagem de entrada img de acordo
 # com o tamanho da janela e limiar de contraste de regiao fornecidos
@@ -89,11 +89,69 @@ def get_bernsen_thr(img, t_janela = 15, ctr_thr = 30):
 
 # bernsen: aplica limiarizacao local de Bernsen com tamanho de janela e limiar de contraste 
 # de regiao fornecidos, exibindo a imagem resultante e seu histograma
-def bernsen(img, inp, t_janela = 15, ctr_thr = 30, wp_val = 255):
+def bernsen(img, inp, t_janela = 15, ctr_thr = 30):
     print("Aplicando limiarizacao local de Bensen em {}".format(inp))
     print("Tamanho da janela = {} x {}".format(t_janela, t_janela))
     thr = get_bernsen_thr(img, t_janela, ctr_thr)
     print("Limiares = \n{}".format(thr))
-    res = ((img < thr) * wp_val).astype(np.uint8)
-    exibir("Bernsen", res, "bernsen_w{}_{}".format(t_janela, inp), 0)
-    histograma(res, titulo = "Bernsen", rotulo_x = "Intensidade", rotulo_y = "Pixels")
+    res = ((img < thr) * 255).astype(np.uint8)
+    exibir("Bernsen (W = {})".format(t_janela), res, "bernsen_w{}_{}".format(t_janela, inp), 0)
+    histograma(res, titulo = "Bernsen (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")
+
+# get_niblack_thr: retorna o limiar de Niblack para cada pixel de uma imagem de entrada img de acordo
+# com o tamanho da janela e fator k fornecidos
+def get_niblack_thr(img, t_janela = 15, k = -0.2):
+
+    # Definindo numero de linhas e colunas da imagem
+    linhas, colunas = img.shape
+    i_linhas, i_colunas = linhas + 1, colunas + 1
+
+    # Utilizar imagens integrais para calcular media e desvio padrao
+    # Definindo primeira linha e coluna como zero por conveniencia
+    integ = np.zeros((i_linhas, i_colunas), np.float)
+    sqr_integral = np.zeros((i_linhas, i_colunas), np.float)
+
+    integ[1:, 1:] = np.cumsum(np.cumsum(img.astype(np.float), axis=0), axis=1)
+    sqr_img = np.square(img.astype(np.float))
+    sqr_integral[1:, 1:] = np.cumsum(np.cumsum(sqr_img, axis=0), axis=1)
+
+    # Definir grid
+    x, y = np.meshgrid(np.arange(1, i_colunas), np.arange(1, i_linhas))
+
+    # Obter coordenadas locais
+    hw_size = t_janela // 2
+    x1 = (x - hw_size).clip(1, colunas)
+    x2 = (x + hw_size).clip(1, colunas)
+    y1 = (y - hw_size).clip(1, linhas)
+    y2 = (y + hw_size).clip(1, linhas)
+
+    # Obter tamanho de areas locais
+    l_size = (y2 - y1 + 1) * (x2 - x1 + 1)
+
+    # Calculando somas
+    somas = (integ[y2, x2] - integ[y2, x1 - 1] -
+            integ[y1 - 1, x2] + integ[y1 - 1, x1 - 1])
+    sqr_sums = (sqr_integral[y2, x2] - sqr_integral[y2, x1 - 1] -
+                sqr_integral[y1 - 1, x2] + sqr_integral[y1 - 1, x1 - 1])
+
+    # Calculando medias locais
+    medias = somas / l_size
+
+    # Calculando desvios padrao locais
+    desvios = np.sqrt(sqr_sums / l_size - np.square(medias))
+
+    # Obtem valores de limiar para cada pixel
+    thr = medias + k * desvios
+
+    return thr
+
+# niblack: aplica limiarizacao local de Niblack com tamanho de janela e 
+# fator k fornecidos, exibindo a imagem resultante e seu histograma
+def niblack(img, inp, t_janela = 15, k = -0.2):
+    print("Aplicando limiarizacao local de Niblack em {}".format(inp))
+    print("Tamanho da janela = {} x {}".format(t_janela, t_janela))
+    thr = get_niblack_thr(img, t_janela, k)
+    print("Limiares = \n{}".format(thr))
+    res = ((img < thr) * 255).astype(np.uint8)
+    exibir("Niblack (W = {}, k = {})".format(t_janela, k), res, "niblack_w{}_k{}_{}".format(t_janela, k, inp), 0)
+    histograma(res, titulo = "Niblack (W = {}, k = {})".format(t_janela, k), rotulo_x = "Intensidade", rotulo_y = "Pixels")
