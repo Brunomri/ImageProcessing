@@ -106,8 +106,8 @@ def bernsen(img, inp, t_janela = 15, ctr_thr = 30):
     res = ((img < thr) * 255).astype(np.uint8)
 
     # Exibe a imagem resultante e seu histograma
-    exibir("Bernsen (W = {})".format(t_janela), res, "bernsen_w{}_{}".format(t_janela, inp), 0)
-    histograma(res, titulo = "Bernsen (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")
+    exibir("Bernsen (W = {}, C = {})".format(t_janela, ctr_thr), res, "bernsen_w{}_c{}_{}".format(t_janela, ctr_thr, inp), 0)
+    histograma(res, titulo = "Bernsen (W = {}, C = {})".format(t_janela, ctr_thr), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
 # get_niblack_thr: retorna o limiar de Niblack para cada pixel de uma imagem de entrada img de acordo
 # com o tamanho da janela e fator k fornecidos
@@ -287,7 +287,7 @@ def get_more_thr(img, t_janela = 15, k = 0.25, R = 0.5, p = 2, q = 10):
 # more: aplica limiarizacao local de Phansalskar, More e Sabale com tamanho de janela e 
 # fator k fornecidos, exibindo a imagem resultante e seu histograma
 def more(img, inp, t_janela = 15, k = 0.5, R = 128, p = 2, q = 10):
-    print("Aplicando limiarizacao local de Sauvola e Pietaksinen em {}".format(inp))
+    print("Aplicando limiarizacao local de Phansalskar, More e Sabale em {}".format(inp))
     print("Tamanho da janela = {} x {}".format(t_janela, t_janela))
 
     # Chamada a funcao que calcula os limiares de cada pixel
@@ -298,8 +298,8 @@ def more(img, inp, t_janela = 15, k = 0.5, R = 128, p = 2, q = 10):
     res = ((img < thr) * 255).astype(np.uint8)
 
     # Exibe a imagem resultante e seu histograma
-    exibir("Phansalskar, More e Sabale (W = {}, k = {})".format(t_janela, k), res, "more_w{}_k{}_{}".format(t_janela, k, inp), 0)
-    histograma(res, titulo = "Phansalskar, More e Sabale (W = {}, k = {})".format(t_janela, k), rotulo_x = "Intensidade", rotulo_y = "Pixels")
+    exibir("More e Sabale (W = {}, k = {}, R = {}, p = {}, q = {})".format(t_janela, k, R, p, q), res, "more_w{}_k{}_r{}_p{}_q{}_{}".format(t_janela, k, R, p, q, inp), 0)
+    histograma(res, titulo = "More e Sabale (W = {}, k = {}, R = {}, p = {}, q = {})".format(t_janela, k, R, p, q), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
 # get_contrast_thr: retorna o limiar de Metodo do Contraste para cada pixel da imagem de entrada utilizando 
 # o tamanho de janela fornecido
@@ -399,3 +399,41 @@ def mean(img, inp, t_janela = 15):
     # Exibe a imagem resultante e seu histograma
     exibir("Metodo da Media (W = {})".format(t_janela), res, "mean_w{}_{}".format(t_janela, inp), 0)
     histograma(res, titulo = "Metodo da Media (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")
+
+# get_median_thr: retorna o limiar de Metodo da Mediana para cada pixel de uma imagem de entrada img de acordo
+# com o tamanho da janela fornecido
+def get_median_thr(img, t_janela = 15):
+
+    thr = np.zeros(img.shape, np.uint8)
+
+    # Tratamento de bordas com padding em funcao do tamanho da janela
+    hw_size = t_janela // 2
+    borda_img = np.ones((img.shape[0] + t_janela - 1,
+                          img.shape[1] + t_janela - 1)) * np.nan
+    borda_img[hw_size: -hw_size,
+               hw_size: -hw_size] = img
+
+    # Obtem janelas do tamanho especificado
+    janelas = view_as_windows(borda_img, (t_janela, t_janela))
+
+    # Calcula o valor minimo e maximo em cada janela
+    thr = np.median(janelas, axis=(2, 3))
+
+    return thr
+
+# median: aplica limiarizacao local do Metodo da Mediana com tamanho de janela
+# fornecido, exibindo a imagem resultante e seu histograma
+def median(img, inp, t_janela = 15):
+    print("Aplicando limiarizacao local do Metodo da Mediana em {}".format(inp))
+    print("Tamanho da janela = {} x {}".format(t_janela, t_janela))
+
+    # Chamada a funcao que calcula os limiares de cada pixel
+    thr = get_median_thr(img, t_janela)
+    print("Limiares = \n{}".format(thr))
+
+    # Atribui valor 255 aos pixels menores que o limiar (pixels brancos ao fundo)
+    res = ((img < thr) * 255).astype(np.uint8)
+
+    # Exibe a imagem resultante e seu histograma
+    exibir("Metodo da Mediana (W = {})".format(t_janela), res, "median_w{}_{}".format(t_janela, inp), 0)
+    histograma(res, titulo = "Metodo da Mediana (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")
