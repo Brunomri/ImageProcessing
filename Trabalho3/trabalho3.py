@@ -27,3 +27,4 @@ else:
         a.sauvola(img, inp, k = -0.35)
         a.more(img, inp, k = -0.5)
         a.contrast(img, inp)
+        a.mean(img, inp)

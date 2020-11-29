@@ -179,19 +179,19 @@ def get_sauvola_thr(img, t_janela = 15, k = 0.5, R = 128):
 
     # Definindo numero de linhas e colunas da imagem
     linhas, colunas = img.shape
-    i_rows, i_cols = linhas + 1, colunas + 1
+    i_linhas, i_colunas = linhas + 1, colunas + 1
 
     # Utilizar imagens integrais para calcular media e desvio padrao
     # Definindo primeira linha e coluna como zero por conveniencia
-    integ = np.zeros((i_rows, i_cols), np.float)
-    sqr_integral = np.zeros((i_rows, i_cols), np.float)
+    integ = np.zeros((i_linhas, i_colunas), np.float)
+    sqr_integral = np.zeros((i_linhas, i_colunas), np.float)
 
     integ[1:, 1:] = np.cumsum(np.cumsum(img.astype(np.float), axis=0), axis=1)
     sqr_img = np.square(img.astype(np.float))
     sqr_integral[1:, 1:] = np.cumsum(np.cumsum(sqr_img, axis=0), axis=1)
 
     # Definir grid
-    x, y = np.meshgrid(np.arange(1, i_cols), np.arange(1, i_rows))
+    x, y = np.meshgrid(np.arange(1, i_colunas), np.arange(1, i_linhas))
 
     # Obter coordenadas locais
     hw_size = t_janela // 2
@@ -243,19 +243,19 @@ def get_more_thr(img, t_janela = 15, k = 0.25, R = 0.5, p = 2, q = 10):
 
     # Definindo numero de linhas e colunas da imagem
     linhas, colunas = img.shape
-    i_rows, i_cols = linhas + 1, colunas + 1
+    i_linhas, i_colunas = linhas + 1, colunas + 1
 
     # Utilizar imagens integrais para calcular media e desvio padrao
     # Definindo primeira linha e coluna como zero por conveniencia
-    integ = np.zeros((i_rows, i_cols), np.float)
-    sqr_integral = np.zeros((i_rows, i_cols), np.float)
+    integ = np.zeros((i_linhas, i_colunas), np.float)
+    sqr_integral = np.zeros((i_linhas, i_colunas), np.float)
 
     integ[1:, 1:] = np.cumsum(np.cumsum(img.astype(np.float), axis=0), axis=1)
     sqr_img = np.square(img.astype(np.float))
     sqr_integral[1:, 1:] = np.cumsum(np.cumsum(sqr_img, axis=0), axis=1)
 
     # Definir grid
-    x, y = np.meshgrid(np.arange(1, i_cols), np.arange(1, i_rows))
+    x, y = np.meshgrid(np.arange(1, i_colunas), np.arange(1, i_linhas))
 
     # Obter coordenadas locais
     hw_size = t_janela // 2
@@ -345,5 +345,57 @@ def contrast(img, inp, t_janela = 15):
     res = ((img < thr) * 255).astype(np.uint8)
 
     # Exibe a imagem resultante e seu histograma
-    exibir("Metodo do Contraste (W = {})".format(t_janela), res, "more_w{}_{}".format(t_janela, inp), 0)
+    exibir("Metodo do Contraste (W = {})".format(t_janela), res, "contrast_w{}_{}".format(t_janela, inp), 0)
     histograma(res, titulo = "Metodo do Contraste (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")
+
+# get_mean_thr: retorna o limiar de Metodo da Media para cada pixel da imagem de entrada utilizando 
+# o tamanho de janela fornecido
+def get_mean_thr(img, t_janela = 15):
+
+    # Definindo numero de linhas e colunas da imagem
+    linhas, colunas = img.shape
+    i_linhas, i_colunas = linhas + 1, colunas + 1
+
+    # Calculando imagem integral
+    integ = np.zeros((i_linhas, i_colunas), np.float)
+
+    integ[1:, 1:] = np.cumsum(np.cumsum(img.astype(np.float), axis=0), axis=1)
+
+    # Definir grid
+    x, y = np.meshgrid(np.arange(1, i_colunas), np.arange(1, i_linhas))
+
+    # Obter coordenadas locais
+    hw_size = t_janela // 2
+    x1 = (x - hw_size).clip(1, colunas)
+    x2 = (x + hw_size).clip(1, colunas)
+    y1 = (y - hw_size).clip(1, linhas)
+    y2 = (y + hw_size).clip(1, linhas)
+
+    # Obter tamanho de areas locais
+    l_size = (y2 - y1 + 1) * (x2 - x1 + 1)
+
+    # Calculando somas
+    somas = (integ[y2, x2] - integ[y2, x1 - 1] -
+            integ[y1 - 1, x2] + integ[y1 - 1, x1 - 1])
+
+    # Calculando medias locais
+    thr = somas / l_size
+
+    return thr
+
+# mean: aplica limiarizacao local do Metodo da Media com tamanho de janela
+# fornecido, exibindo a imagem resultante e seu histograma
+def mean(img, inp, t_janela = 15):
+    print("Aplicando limiarizacao local do Metodo da Media em {}".format(inp))
+    print("Tamanho da janela = {} x {}".format(t_janela, t_janela))
+
+    # Chamada a funcao que calcula os limiares de cada pixel
+    thr = get_mean_thr(img, t_janela)
+    print("Limiares = \n{}".format(thr))
+
+    # Atribui valor 255 aos pixels menores que o limiar (pixels brancos ao fundo)
+    res = ((img < thr) * 255).astype(np.uint8)
+
+    # Exibe a imagem resultante e seu histograma
+    exibir("Metodo da Media (W = {})".format(t_janela), res, "mean_w{}_{}".format(t_janela, inp), 0)
+    histograma(res, titulo = "Metodo da Media (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")
