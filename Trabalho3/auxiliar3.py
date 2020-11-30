@@ -10,7 +10,10 @@ import math
 # apenas continua a execucao
 def exibir(janela,img,saida,close):
     print("Exibindo {}".format(saida))
-    cv.imshow(janela, img)
+    #cv.imshow(janela, img)
+    fig = plt.figure()
+    fig.canvas.set_window_title(janela)
+    plt.imshow(img, cmap='gray', vmin=0, vmax=255)
     k = cv.waitKey(0) & 0xFF
 
     if k == ord("s"):
@@ -416,8 +419,8 @@ def get_median_thr(img, t_janela = 15):
     # Obtem janelas do tamanho especificado
     janelas = view_as_windows(borda_img, (t_janela, t_janela))
 
-    # Calcula o valor minimo e maximo em cada janela
-    thr = np.median(janelas, axis=(2, 3))
+    # Calcula o valor da mediana em cada janela
+    thr = np.nanmedian(janelas, axis=(2, 3))
 
     return thr
 
