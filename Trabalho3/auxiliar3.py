@@ -6,30 +6,14 @@ from matplotlib import pyplot as plt
 from skimage.util.shape import view_as_windows
 import math
 
-# exibir: exibe a imagem em uma janela e a salva em um arquivo se o usuario entrar "s", senão
-# apenas continua a execucao
-def exibir(janela,img,saida,close):
+# exibir: exibe a imagem em uma janela utilizando matplotlib imshow
+def exibir(janela,img,saida):
     print("Exibindo {}".format(saida))
     #cv.imshow(janela, img)
     fig = plt.figure()
     fig.canvas.set_window_title(janela)
     plt.imshow(img, cmap='gray', vmin=0, vmax=255)
-    k = cv.waitKey(0) & 0xFF
 
-    if k == ord("s"):
-        print("Gerando arquivo {}".format(saida))
-        cv.imwrite(saida, img)
-
-    print()
-
-    # Parametro close == 1 fecha apenas a janela selecionada
-    # Parametro close == 2 fecha todas as janelas
-    if close == 1:
-        cv.destroyWindow(janela)
-    elif close == 2:
-        cv.destroyAllWindows()
-    else:
-        return
 
 # histograma: calcula e exibe o histograma da imagem. O percentual de pixels preto é informado no console.
 def histograma(img, ch = 0, bins = 256, lb = 0, ub = 256, titulo = "", rotulo_x = "", rotulo_y = ""):
@@ -62,7 +46,7 @@ def otsu(img, inp):
     print("Limiar = {}".format(thr))
 
     # Exibe a imagem resultante e seu histograma
-    exibir("Otsu (T = {})".format(thr), res, "otsu_t{}_{}".format(thr, inp), 0)
+    exibir("Otsu (T = {})".format(thr), res, "otsu_t{}_{}".format(thr, inp))
     histograma(res, titulo = "Otsu (T = {})".format(thr), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
 # get_bernsen_thr: retorna o limiar de Bernsen para cada pixel de uma imagem de entrada img de acordo
@@ -109,7 +93,7 @@ def bernsen(img, inp, t_janela = 15, ctr_thr = 30):
     res = ((img < thr) * 255).astype(np.uint8)
 
     # Exibe a imagem resultante e seu histograma
-    exibir("Bernsen (W = {}, C = {})".format(t_janela, ctr_thr), res, "bernsen_w{}_c{}_{}".format(t_janela, ctr_thr, inp), 0)
+    exibir("Bernsen (W = {}, C = {})".format(t_janela, ctr_thr), res, "bernsen_w{}_c{}_{}".format(t_janela, ctr_thr, inp))
     histograma(res, titulo = "Bernsen (W = {}, C = {})".format(t_janela, ctr_thr), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
 # get_niblack_thr: retorna o limiar de Niblack para cada pixel de uma imagem de entrada img de acordo
@@ -173,7 +157,7 @@ def niblack(img, inp, t_janela = 15, k = -0.2):
     res = ((img < thr) * 255).astype(np.uint8)
 
     # Exibe a imagem resultante e seu histograma
-    exibir("Niblack (W = {}, k = {})".format(t_janela, k), res, "niblack_w{}_k{}_{}".format(t_janela, k, inp), 0)
+    exibir("Niblack (W = {}, k = {})".format(t_janela, k), res, "niblack_w{}_k{}_{}".format(t_janela, k, inp))
     histograma(res, titulo = "Niblack (W = {}, k = {})".format(t_janela, k), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
 # get_sauvola_thr: retorna o limiar de Sauvola e Pietaksinen para cada pixel de uma imagem de entrada img de acordo
@@ -237,7 +221,7 @@ def sauvola(img, inp, t_janela = 15, k = 0.5, R = 128):
     res = ((img < thr) * 255).astype(np.uint8)
 
     # Exibe a imagem resultante e seu histograma
-    exibir("Sauvola e Pietaksinen (W = {}, k = {})".format(t_janela, k), res, "sauvola_w{}_k{}_{}".format(t_janela, k, inp), 0)
+    exibir("Sauvola e Pietaksinen (W = {}, k = {})".format(t_janela, k), res, "sauvola_w{}_k{}_{}".format(t_janela, k, inp))
     histograma(res, titulo = "Sauvola e Pietaksinen (W = {}, k = {})".format(t_janela, k), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
 # get_more_thr: retorna o limiar de Phansalskar, More e Sabale para cada pixel de uma imagem de entrada img de acordo
@@ -301,7 +285,7 @@ def more(img, inp, t_janela = 15, k = 0.5, R = 128, p = 2, q = 10):
     res = ((img < thr) * 255).astype(np.uint8)
 
     # Exibe a imagem resultante e seu histograma
-    exibir("More e Sabale (W = {}, k = {}, R = {}, p = {}, q = {})".format(t_janela, k, R, p, q), res, "more_w{}_k{}_r{}_p{}_q{}_{}".format(t_janela, k, R, p, q, inp), 0)
+    exibir("More e Sabale (W = {}, k = {}, R = {}, p = {}, q = {})".format(t_janela, k, R, p, q), res, "more_w{}_k{}_r{}_p{}_q{}_{}".format(t_janela, k, R, p, q, inp))
     histograma(res, titulo = "More e Sabale (W = {}, k = {}, R = {}, p = {}, q = {})".format(t_janela, k, R, p, q), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
 # get_contrast_thr: retorna o limiar de Metodo do Contraste para cada pixel da imagem de entrada utilizando 
@@ -348,7 +332,7 @@ def contrast(img, inp, t_janela = 15):
     res = ((img < thr) * 255).astype(np.uint8)
 
     # Exibe a imagem resultante e seu histograma
-    exibir("Metodo do Contraste (W = {})".format(t_janela), res, "contrast_w{}_{}".format(t_janela, inp), 0)
+    exibir("Metodo do Contraste (W = {})".format(t_janela), res, "contrast_w{}_{}".format(t_janela, inp))
     histograma(res, titulo = "Metodo do Contraste (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
 # get_mean_thr: retorna o limiar de Metodo da Media para cada pixel da imagem de entrada utilizando 
@@ -400,7 +384,7 @@ def mean(img, inp, t_janela = 15):
     res = ((img < thr) * 255).astype(np.uint8)
 
     # Exibe a imagem resultante e seu histograma
-    exibir("Metodo da Media (W = {})".format(t_janela), res, "mean_w{}_{}".format(t_janela, inp), 0)
+    exibir("Metodo da Media (W = {})".format(t_janela), res, "mean_w{}_{}".format(t_janela, inp))
     histograma(res, titulo = "Metodo da Media (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")
 
 # get_median_thr: retorna o limiar de Metodo da Mediana para cada pixel de uma imagem de entrada img de acordo
@@ -438,5 +422,5 @@ def median(img, inp, t_janela = 15):
     res = ((img < thr) * 255).astype(np.uint8)
 
     # Exibe a imagem resultante e seu histograma
-    exibir("Metodo da Mediana (W = {})".format(t_janela), res, "median_w{}_{}".format(t_janela, inp), 0)
+    exibir("Metodo da Mediana (W = {})".format(t_janela), res, "median_w{}_{}".format(t_janela, inp))
     histograma(res, titulo = "Metodo da Mediana (W = {})".format(t_janela), rotulo_x = "Intensidade", rotulo_y = "Pixels")

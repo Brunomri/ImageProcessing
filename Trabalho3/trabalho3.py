@@ -19,7 +19,7 @@ else:
     if img is None:
         sys.exit("Nao foi possivel ler a imagem")
     else:
-        a.exibir("Original", img, "{}".format(inp), 0)
+        a.exibir("Original", img, "{}".format(inp))
         a.histograma(img, titulo = "Original", rotulo_x = "Intensidade", rotulo_y = "Pixels")
         a.otsu(img, inp)
         a.bernsen(img, inp)
