@@ -113,4 +113,11 @@ def decodeMsg(img):
     #print(decodedMsg)
 
     # Remove o delimitador de fim de cadeia e retorna a mensagem
-    return decodedMsg[:-5]
+    res = decodedMsg[:-5]
+
+    # Cria uma arquivo de texto para a mensagem decodificada e
+    # retorna o resultado ao programa principal
+    f = open("saida.txt", "w+")
+    f.write(res)
+    f.close()
+    return res

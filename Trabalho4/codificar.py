@@ -34,17 +34,17 @@ else:
     print("Plano: {}".format(plano))
 
     # Carrega o nome da imagem de saida onde sera armazenada a mensagem
-    nome = sys.argv[4]
-    print("Imagem de saida: {}\n".format(nome))
+    nomeSaida = sys.argv[4]
+    print("Imagem de saida: {}\n".format(nomeSaida))
 
     # Verifica se argumentos de entrada sao validos
     if img is None:
         sys.exit("Nao foi possivel ler a imagem")
     else:
         a.exibir("Original", img, "{}".format(inp))
-        #msgBin = a.convBin(msg)
-        #print("Texto em binario: {}".format(msgBin))
+
         msgImg = a.codeMsg(img, msg)
-        a.exibir("Codificada", msgImg, "msg_{}".format(inp))
+        a.exibir("Codificada", msgImg, "{}".format(nomeSaida))
+
         decMsg = a.decodeMsg(msgImg)
         print("Mensagem decodificada: {}".format(decMsg))
