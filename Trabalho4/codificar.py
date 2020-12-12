@@ -21,12 +21,12 @@ else:
     inp = sys.argv[1]
     print("Imagem original: {}".format(inp))
     img = cv.imread(inp, 1)
-    cv.cvtColor(img, cv.COLOR_BGR2RGB, img)
 
     # Carrega o texto da mensagem
     print("Arquivo de entrada: {}".format(sys.argv[2]))
     f = open(sys.argv[2], "r")
     msg = f.read()
+    f.close()
     print("Texto de entrada:\n{}".format(msg))
 
     # Carrega o plano de bits
@@ -41,10 +41,7 @@ else:
     if img is None:
         sys.exit("Nao foi possivel ler a imagem")
     else:
-        a.exibir("Original", img, "{}".format(inp))
+        a.exibir("Original", img, "{}".format(inp), 0)
 
         msgImg = a.codeMsg(img, msg)
-        a.exibir("Codificada", msgImg, "{}".format(nomeSaida))
-
-        decMsg = a.decodeMsg(msgImg)
-        print("Mensagem decodificada: {}".format(decMsg))
+        a.exibir("Codificada", msgImg, "{}".format(nomeSaida), 0)

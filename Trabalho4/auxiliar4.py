@@ -2,17 +2,31 @@
 
 import cv2 as cv
 import numpy as np
-from matplotlib import pyplot as plt
+import sys
+import os.path
+from os import path
 
-# exibir: exibe a imagem em uma janela utilizando matplotlib imshow
-def exibir(janela, img, saida, axis = "on"):
+# exibir: exibe a imagem em uma janela e a salva em um arquivo se o usuario entrar "s", senão
+# apenas continua a execucao
+def exibir(janela,img,saida,close):
     print("Exibindo {}".format(saida))
-    #cv.imshow(janela, img)
-    fig = plt.figure()
-    fig.canvas.set_window_title(janela)
-    plt.axis(axis)
-    plt.imshow(img)
-    plt.show()
+    cv.imshow(janela, img)
+    k = cv.waitKey(0) & 0xFF
+
+    if k == ord("s"):
+        print("Gerando arquivo {}".format(saida))
+        cv.imwrite(saida, img)
+
+    print()
+
+    # Parametro close == 1 fecha apenas a janela selecionada
+    # Parametro close == 2 fecha todas as janelas
+    if close == 1:
+        cv.destroyWindow(janela)
+    elif close == 2:
+        cv.destroyAllWindows()
+    else:
+        return
 
 # convBin: Converte diversos tipos de variaveis para binario com 8 bits
 def convBin(msg):
@@ -52,14 +66,14 @@ def codeMsg(img, msg):
     for linha in img:
         for pixel in linha:
             # Converte cada banda de cor de um pixel para binario de 8 bits
-            r, g, b = convBin(pixel)
+            b, g, r = convBin(pixel)
             # Modifica o bit menos significativo da imagem se ainda houve caracteres
             # a processar na mensagem
             if indexMsg < lenMsg:
                 # Substitui bit menos significativo da banda
-                # de cor vermelha do pixel por um bit da mensagem e
+                # de cor azul do pixel por um bit da mensagem e
                 # converte o novo valor para um inteiro decimal
-                pixel[0] = int(r[:-1] + binMsg[indexMsg], 2)
+                pixel[0] = int(b[:-1] + binMsg[indexMsg], 2)
                 indexMsg += 1
             if indexMsg < lenMsg:
                 # Substitui bit menos significativo da banda
@@ -69,9 +83,9 @@ def codeMsg(img, msg):
                 indexMsg += 1
             if indexMsg < lenMsg:
                 # Substitui bit menos significativo da banda
-                # de cor azul do pixel por um bit da mensagem e
+                # de cor vermelha do pixel por um bit da mensagem e
                 # converte o novo valor para um inteiro decimal
-                pixel[2] = int(b[:-1] + binMsg[indexMsg], 2)
+                pixel[2] = int(r[:-1] + binMsg[indexMsg], 2)
                 indexMsg += 1
             # Encerra o processamento quando toda a mensagem for codificada
             if indexMsg >= lenMsg:
@@ -88,16 +102,16 @@ def decodeMsg(img):
     for linha in img:
         for pixel in linha:
             # Converte cada banda de cor de um pixel para binario de 8 bits
-            r, g, b = convBin(pixel)
+            b, g, r = convBin(pixel)
+            # Extrai o bit menos significativo da banda azul e o adiciona
+            # a mensagem em binario
+            binMsg += b[-1]
+            # Extrai o bit menos significativo da banda verde e o adiciona
+            # a mensagem em binario
+            binMsg += g[-1]
             # Extrai o bit menos significativo da banda vermelha e o adiciona
             # a mensagem em binario
             binMsg += r[-1]
-            # Extrai o bit menos significativo da banda verde o adiciona
-            # a mensagem em binario
-            binMsg += g[-1]
-            # Extrai o bit menos significativo da banda azul o adiciona pixel e o adiciona
-            # a mensagem em binario
-            binMsg += b[-1]
 
     # Agrupa a mensagem binaria em 8 bits para permitir conversao em
     # caracteres ASCII
@@ -120,4 +134,10 @@ def decodeMsg(img):
     f = open("saida.txt", "w+")
     f.write(res)
     f.close()
+
+    if path.exists("saida.txt"):
+        print("A mensagem decodificada foi escrita no arquivo {}".format("saida.txt"))
+    else:
+        sys.exit("Nao foi possivel escrever o arquivo {}\n".format("saida.txt"))
+
     return res
