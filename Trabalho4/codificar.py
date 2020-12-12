@@ -42,6 +42,9 @@ else:
         sys.exit("Nao foi possivel ler a imagem")
     else:
         a.exibir("Original", img, "{}".format(inp))
-        msgBin = a.convBin(msg)
-        print("Texto em binario: {}".format(msgBin))
+        #msgBin = a.convBin(msg)
+        #print("Texto em binario: {}".format(msgBin))
         msgImg = a.codeMsg(img, msg)
+        a.exibir("Codificada", msgImg, "msg_{}".format(inp))
+        decMsg = a.decodeMsg(msgImg)
+        print("Mensagem decodificada: {}".format(decMsg))
