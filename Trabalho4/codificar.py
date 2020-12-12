@@ -42,3 +42,5 @@ else:
         sys.exit("Nao foi possivel ler a imagem")
     else:
         a.exibir("Original", img, "{}".format(inp))
+        msgBin = a.convBin(msg)
+        print("Texto em binario: {}".format(msgBin))
