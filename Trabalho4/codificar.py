@@ -10,7 +10,6 @@
     Uso: python codificar.py imagem_entrada.png texto_entrada.txt plano_bits imagem_saida.png '''
 
 import cv2 as cv
-import matplotlib.image as mpimg
 import sys, auxiliar4 as a
 
 # Verifica se usuario forneceu a quantidade correta de argumentos
@@ -21,7 +20,8 @@ else:
     # Carrega imagem de entrada
     inp = sys.argv[1]
     print("Imagem original: {}".format(inp))
-    img = mpimg.imread(inp)
+    img = cv.imread(inp, 1)
+    cv.cvtColor(img, cv.COLOR_BGR2RGB, img)
 
     # Carrega o texto da mensagem
     print("Arquivo de entrada: {}".format(sys.argv[2]))
@@ -44,3 +44,4 @@ else:
         a.exibir("Original", img, "{}".format(inp))
         msgBin = a.convBin(msg)
         print("Texto em binario: {}".format(msgBin))
+        msgImg = a.codeMsg(img, msg)
