@@ -18,22 +18,26 @@ if len(sys.argv) != 4:
 else:
     # Carrega imagem codificada
     inp = sys.argv[1]
-    print("Imagem codificada: {}".format(inp))
     img = cv.imread(inp, 1)
 
+    if img is None:
+        sys.exit("Erro: Nao foi possivel ler a imagem {}\n".format(inp))
+    else:
+        print("Imagem codificada: {}".format(inp))
+
     # Carrega o plano de bits
-    plano = sys.argv[2]
-    print("Plano: {}".format(plano))
+    plano = int(sys.argv[2])
+    
+    if not 0 <= plano <= 7:
+        sys.exit("Erro: O plano deve estar entre 0 e 7 inclusive. O plano {} nao faz parte da imagem.\n".format(plano))
+    else:
+        print("Plano: {}".format(plano))
 
     # Carrega o nome do arquivo de saida onde sera decodificada a mensagem
     nomeSaida = sys.argv[3]
     print("Arquivo de saida: {}\n".format(nomeSaida))
 
-    # Verifica se argumentos de entrada sao validos
-    if img is None:
-        sys.exit("Nao foi possivel ler a imagem")
-    else:
-        a.exibir("Codificada", img, "{}".format(inp), 0)
+    a.exibir("Codificada", img, "{}".format(inp), 0)
 
-        decMsg = a.decodeMsg(img, nomeSaida, int(plano))
-        print("Mensagem decodificada:\n{}\n".format(decMsg))
+    decMsg = a.decodeMsg(img, nomeSaida, plano)
+    print("Mensagem decodificada:\n{}\n".format(decMsg))
