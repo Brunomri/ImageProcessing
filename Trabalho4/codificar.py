@@ -14,8 +14,7 @@ import sys, auxiliar4 as a
 
 # Verifica se usuario forneceu a quantidade correta de argumentos
 if len(sys.argv) != 5:
-    print("Uso: python codificar.py imagem_entrada.png texto_entrada.txt plano_bits imagem_saida.png")
-    sys.exit()
+    sys.exit("Uso: python codificar.py imagem_entrada.png texto_entrada.txt plano_bits imagem_saida.png")
 else:
     # Carrega imagem de entrada
     inp = sys.argv[1]
@@ -43,5 +42,5 @@ else:
     else:
         a.exibir("Original", img, "{}".format(inp), 0)
 
-        msgImg = a.codeMsg(img, msg)
+        msgImg = a.codeMsg(img, msg, int(plano))
         a.exibir("Codificada", msgImg, "{}".format(nomeSaida), 0)

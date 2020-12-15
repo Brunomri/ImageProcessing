@@ -41,7 +41,7 @@ def convBin(msg):
 
 # codeMsg: Codifica a mensagem nos bits menos significativos de cada banda de cor
 # de um pixel da imagem de entrada
-def codeMsg(img, msg):
+def codeMsg(img, msg, plano):
 
     # Calcula o numero maximo de bytes a codificar
     bytesNum = img.shape[0] * img.shape[1] * 3 // 8
@@ -74,19 +74,22 @@ def codeMsg(img, msg):
                 # Substitui bit menos significativo da banda
                 # de cor azul do pixel por um bit da mensagem e
                 # converte o novo valor para um inteiro decimal
-                pixel[0] = int(b[:-1] + binMsg[indexMsg], 2)
+                #pixel[0] = int(b[:-1] + binMsg[indexMsg], 2)
+                pixel[0] = int(b[:(7 - plano)] + binMsg[indexMsg] + b[(7 - plano):-1], 2)
                 indexMsg += 1
             if indexMsg < lenMsg:
                 # Substitui bit menos significativo da banda
                 # de cor verde do pixel por um bit da mensagem e
                 # converte o novo valor para um inteiro decimal
-                pixel[1] = int(g[:-1] + binMsg[indexMsg], 2)
+                #pixel[1] = int(g[:-1] + binMsg[indexMsg], 2)
+                pixel[1] = int(g[:(7 - plano)] + binMsg[indexMsg] + g[(7 - plano):-1], 2)
                 indexMsg += 1
             if indexMsg < lenMsg:
                 # Substitui bit menos significativo da banda
                 # de cor vermelha do pixel por um bit da mensagem e
                 # converte o novo valor para um inteiro decimal
-                pixel[2] = int(r[:-1] + binMsg[indexMsg], 2)
+                #pixel[2] = int(r[:-1] + binMsg[indexMsg], 2)
+                pixel[2] = int(r[:(7 - plano)] + binMsg[indexMsg] + r[(7 - plano):-1], 2)
                 indexMsg += 1
             # Encerra o processamento quando toda a mensagem for codificada
             if indexMsg >= lenMsg:
@@ -94,7 +97,7 @@ def codeMsg(img, msg):
 
     return img
 
-def decodeMsg(img, nomeSaida):
+def decodeMsg(img, nomeSaida, plano):
 
     # String para armezar os bits extraidos da imagem
     binMsg = ""
@@ -106,13 +109,16 @@ def decodeMsg(img, nomeSaida):
             b, g, r = convBin(pixel)
             # Extrai o bit menos significativo da banda azul e o adiciona
             # a mensagem em binario
-            binMsg += b[-1]
+            #binMsg += b[-1]
+            binMsg += b[7 - plano]
             # Extrai o bit menos significativo da banda verde e o adiciona
             # a mensagem em binario
-            binMsg += g[-1]
+            #binMsg += g[-1]
+            binMsg += g[7 - plano]
             # Extrai o bit menos significativo da banda vermelha e o adiciona
             # a mensagem em binario
-            binMsg += r[-1]
+            #binMsg += r[-1]
+            binMsg += r[7 - plano]
 
     # Agrupa a mensagem binaria em 8 bits para permitir conversao em
     # caracteres ASCII

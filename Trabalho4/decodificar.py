@@ -14,8 +14,7 @@ import sys, auxiliar4 as a
 
 # Verifica se usuario forneceu a quantidade correta de argumentos
 if len(sys.argv) != 4:
-    print("Uso: python decodificar.py imagem_saida.png plano_bits texto_saida.txt")
-    sys.exit()
+    sys.exit("Uso: python decodificar.py imagem_saida.png plano_bits texto_saida.txt")
 else:
     # Carrega imagem codificada
     inp = sys.argv[1]
@@ -36,5 +35,5 @@ else:
     else:
         a.exibir("Codificada", img, "{}".format(inp), 0)
 
-        decMsg = a.decodeMsg(img, nomeSaida)
-        print("Mensagem decodificada:\n{}".format(decMsg))
+        decMsg = a.decodeMsg(img, nomeSaida, int(plano))
+        print("Mensagem decodificada:\n{}\n".format(decMsg))
