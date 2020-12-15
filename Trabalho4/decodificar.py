@@ -36,5 +36,5 @@ else:
     else:
         a.exibir("Codificada", img, "{}".format(inp), 0)
 
-        decMsg = a.decodeMsg(img)
+        decMsg = a.decodeMsg(img, nomeSaida)
         print("Mensagem decodificada:\n{}".format(decMsg))

@@ -45,12 +45,13 @@ def codeMsg(img, msg):
 
     # Calcula o numero maximo de bytes a codificar
     bytesNum = img.shape[0] * img.shape[1] * 3 // 8
-    print("Numero de bytes disponiveis:", bytesNum)
+    print("Numero de bytes disponiveis: {}".format(bytesNum))
 
     # Verifica se numero de bytes da mensagem cabe no numero de bytes
     # disponivel na imagem
     if len(msg) > bytesNum:
         raise ValueError("Nao ha bytes suficientes na imagem para codificar a mensagem \n{}\n que possui {} bytes em uma imagem que possui {}".format(msg, len(msg), bytesNum))
+    print("Numero de bytes da mensagem: {}".format(len(msg)))
   
     # Adiciona a mensagem o delimitador de fim de cadeia
     msg += "#####"
@@ -93,7 +94,7 @@ def codeMsg(img, msg):
 
     return img
 
-def decodeMsg(img):
+def decodeMsg(img, nomeSaida):
 
     # String para armezar os bits extraidos da imagem
     binMsg = ""
@@ -131,13 +132,13 @@ def decodeMsg(img):
 
     # Cria uma arquivo de texto para a mensagem decodificada e
     # retorna o resultado ao programa principal
-    f = open("saida.txt", "w+")
+    f = open(nomeSaida, "w+")
     f.write(res)
     f.close()
 
-    if path.exists("saida.txt"):
-        print("A mensagem decodificada foi escrita no arquivo {}".format("saida.txt"))
+    if path.exists(nomeSaida):
+        print("A mensagem decodificada foi escrita no arquivo {}\n".format(nomeSaida))
     else:
-        sys.exit("Nao foi possivel escrever o arquivo {}\n".format("saida.txt"))
+        sys.exit("Nao foi possivel escrever o arquivo {}\n".format(nomeSaida))
 
     return res
