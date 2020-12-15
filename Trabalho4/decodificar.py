@@ -37,7 +37,8 @@ else:
     nomeSaida = sys.argv[3]
     print("Arquivo de saida: {}\n".format(nomeSaida))
 
-    a.exibir("Codificada", img, "{}".format(inp), 0)
-
     decMsg = a.decodeMsg(img, nomeSaida, plano)
+    a.exibir("Codificada", img, "{}".format(inp), 0)
     print("Mensagem decodificada:\n{}\n".format(decMsg))
+
+    a.exibirPlanos(img, inp)
