@@ -8,16 +8,15 @@ from os import path
 
 # exibir: exibe a imagem em uma janela e a salva em um arquivo se o usuario entrar "s", senão
 # apenas continua a execucao
-def exibir(janela,img,saida,close):
+def exibir(janela, img, saida, close = 0):
     print("Exibindo {}".format(saida))
+    print("Pressione {} para salvar a imagem ou qualquer outra tecla para prosseguir\n".format("\"s\""))
     cv.imshow(janela, img)
     k = cv.waitKey(0) & 0xFF
 
     if k == ord("s"):
         print("Gerando arquivo {}".format(saida))
         cv.imwrite(saida, img)
-
-    print()
 
     # Parametro close == 1 fecha apenas a janela selecionada
     # Parametro close == 2 fecha todas as janelas
@@ -32,14 +31,17 @@ def exibir(janela,img,saida,close):
 def convBin(msg):
     if type(msg) == str:
         return ''.join([format(ord(i), "08b") for i in msg ])
+
     elif type(msg) == bytes or type(msg) == np.ndarray:
         return [format(i, "08b") for i in msg ]
+
     elif type(msg) == int or type(msg) == np.uint8:
         return format(msg, "08b")
+
     else:
         raise TypeError("Tipo nao suportado")
 
-# codeMsg: Codifica a mensagem nos bits menos significativos de cada banda de cor
+# codeMsg: Codifica a mensagem em um plano de bits especificado para cada banda de cor
 # de um pixel da imagem de entrada
 def codeMsg(img, msg, plano):
 
@@ -68,35 +70,38 @@ def codeMsg(img, msg, plano):
         for pixel in linha:
             # Converte cada banda de cor de um pixel para binario de 8 bits
             b, g, r = convBin(pixel)
-            # Modifica o bit menos significativo da imagem se ainda houve caracteres
+
+            # Modifica o bit do plano especificado na imagem se ainda houve caracteres
             # a processar na mensagem
             if indexMsg < lenMsg:
-                # Substitui bit menos significativo da banda
+                # Substitui bit do plano especificado da banda
                 # de cor azul do pixel por um bit da mensagem e
                 # converte o novo valor para um inteiro decimal
-                #pixel[0] = int(b[:-1] + binMsg[indexMsg], 2)
                 pixel[0] = int(b[:(7 - plano)] + binMsg[indexMsg] + b[(7 - plano):-1], 2)
                 indexMsg += 1
+
             if indexMsg < lenMsg:
-                # Substitui bit menos significativo da banda
+                # Substitui bit do plano especificado da banda
                 # de cor verde do pixel por um bit da mensagem e
                 # converte o novo valor para um inteiro decimal
-                #pixel[1] = int(g[:-1] + binMsg[indexMsg], 2)
                 pixel[1] = int(g[:(7 - plano)] + binMsg[indexMsg] + g[(7 - plano):-1], 2)
                 indexMsg += 1
+
             if indexMsg < lenMsg:
-                # Substitui bit menos significativo da banda
+                # Substitui bit do plano especificado da banda
                 # de cor vermelha do pixel por um bit da mensagem e
                 # converte o novo valor para um inteiro decimal
-                #pixel[2] = int(r[:-1] + binMsg[indexMsg], 2)
                 pixel[2] = int(r[:(7 - plano)] + binMsg[indexMsg] + r[(7 - plano):-1], 2)
                 indexMsg += 1
+
             # Encerra o processamento quando toda a mensagem for codificada
             if indexMsg >= lenMsg:
                 break
 
     return img
 
+# decodeMsg: Decodifica a mensagem em um plano de bits especificado para cada banda de cor
+# de um pixel da imagem de entrada
 def decodeMsg(img, nomeSaida, plano):
 
     # String para armezar os bits extraidos da imagem
@@ -107,17 +112,17 @@ def decodeMsg(img, nomeSaida, plano):
         for pixel in linha:
             # Converte cada banda de cor de um pixel para binario de 8 bits
             b, g, r = convBin(pixel)
-            # Extrai o bit menos significativo da banda azul e o adiciona
+
+            # Extrai o bit do plano especificado da banda azul e o adiciona
             # a mensagem em binario
-            #binMsg += b[-1]
             binMsg += b[7 - plano]
-            # Extrai o bit menos significativo da banda verde e o adiciona
+
+            # Extrai o bit do plano especificado da banda verde e o adiciona
             # a mensagem em binario
-            #binMsg += g[-1]
             binMsg += g[7 - plano]
-            # Extrai o bit menos significativo da banda vermelha e o adiciona
+
+            # Extrai o bit do plano especificado da banda vermelha e o adiciona
             # a mensagem em binario
-            #binMsg += r[-1]
             binMsg += r[7 - plano]
 
     # Agrupa a mensagem binaria em 8 bits para permitir conversao em
@@ -133,7 +138,7 @@ def decodeMsg(img, nomeSaida, plano):
             break
     #print(decodedMsg)
 
-    # Remove o delimitador de fim de cadeia e retorna a mensagem
+    # Remove o delimitador de fim de cadeia
     res = decodedMsg[:-5]
 
     # Cria uma arquivo de texto para a mensagem decodificada e
@@ -147,6 +152,7 @@ def decodeMsg(img, nomeSaida, plano):
     else:
         sys.exit("Nao foi possivel escrever o arquivo {}\n".format(nomeSaida))
 
+    # Retorna a mensagem
     return res
 
 # getPlano: cria uma máscara para obter um determinado plano de bits de uma imagem
@@ -157,11 +163,15 @@ def getPlano(img, plano):
     r = t * 255
     return r
 
+# exibirPlano: Exibe os planos de bits especificados para cada banda de cor
+# de uma imagem
 def exibirPlanos(img, inp, planos = [0, 1, 2, 3, 4, 5, 6, 7]):
+    # Separa a imagem nas bandas azul, verde e vermelho
     b, g, r = cv.split(img)
     ch = {"b" : b, "g" : g, "r" : r}
 
+    # Exibe os planos de bits percorrendo cada plano e cada banda de cor
     for p in planos:
         for cor in ch:
-            exibir("Plano {} {}".format(p, cor), getPlano(ch.get(cor), p), "{}_{}_{}".format(cor, p, inp), 0)
+            exibir("Plano {} {}".format(p, cor), getPlano(ch.get(cor), p), "{}_{}_{}".format(p, cor, inp), 0)
         cv.destroyAllWindows()

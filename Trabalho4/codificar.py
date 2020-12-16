@@ -52,7 +52,9 @@ else:
     nomeSaida = sys.argv[4]
     print("Imagem de saida: {}\n".format(nomeSaida))
 
+    # Exibe a imagem original
     a.exibir("Original", img, "{}".format(inp), 0)
 
+    # Codifica a mensagem na imagem
     msgImg = a.codeMsg(img, msg, plano)
     a.exibir("Codificada", msgImg, "{}".format(nomeSaida), 0)
