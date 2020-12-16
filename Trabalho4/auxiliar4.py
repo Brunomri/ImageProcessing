@@ -161,7 +161,7 @@ def exibirPlanos(img, inp, planos = [0, 1, 2, 3, 4, 5, 6, 7]):
     b, g, r = cv.split(img)
     ch = {"b" : b, "g" : g, "r" : r}
 
-    for cor in ch:
-        for p in planos:
+    for p in planos:
+        for cor in ch:
             exibir("Plano {} {}".format(p, cor), getPlano(ch.get(cor), p), "{}_{}_{}".format(cor, p, inp), 0)
         cv.destroyAllWindows()
