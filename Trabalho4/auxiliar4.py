@@ -157,26 +157,11 @@ def getPlano(img, plano):
     r = t * 255
     return r
 
-def exibirPlanos(img, inp):
+def exibirPlanos(img, inp, planos = [0, 1, 2, 3, 4, 5, 6, 7]):
     b, g, r = cv.split(img)
-    
-    exibir("Plano 0 azul", getPlano(b, 0), "b_p0_{}".format(inp), 0)
-    exibir("Plano 1 azul", getPlano(b, 1), "b_p1_{}".format(inp), 0)
-    exibir("Plano 2 azul", getPlano(b, 2), "b_p2_{}".format(inp), 0)
-    #exibir("Plano 4 azul", getPlano(b, 4), "b_p4_{}".format(inp), 0)
-    exibir("Plano 7 azul", getPlano(b, 7), "b_p7_{}".format(inp), 0)
-    #cv.destroyAllWindows()
+    ch = {"b" : b, "g" : g, "r" : r}
 
-    exibir("Plano 0 verde", getPlano(g, 0), "g_p0_{}".format(inp), 0)
-    exibir("Plano 1 verde", getPlano(g, 1), "g_p1_{}".format(inp), 0)
-    exibir("Plano 2 verde", getPlano(g, 2), "g_p2_{}".format(inp), 0)
-    #exibir("Plano 4 verde", getPlano(g, 4), "g_p4_{}".format(inp), 0)
-    exibir("Plano 7 verde", getPlano(g, 7), "g_p7_{}".format(inp), 0)
-    #cv.destroyAllWindows()
-
-    exibir("Plano 0 vermelho", getPlano(r, 0), "r_p0_{}".format(inp), 0)
-    exibir("Plano 1 vermelho", getPlano(r, 1), "r_p1_{}".format(inp), 0)
-    exibir("Plano 2 vermelho", getPlano(r, 2), "r_p2_{}".format(inp), 0)
-    #exibir("Plano 4 vermelho", getPlano(r, 4), "r_p4_{}".format(inp), 0)
-    exibir("Plano 7 vermelho", getPlano(r, 7), "r_p7_{}".format(inp), 0)
-    #cv.destroyAllWindows()
+    for cor in ch:
+        for p in planos:
+            exibir("Plano {} {}".format(p, cor), getPlano(ch.get(cor), p), "{}_{}_{}".format(cor, p, inp), 0)
+        cv.destroyAllWindows()

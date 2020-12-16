@@ -41,4 +41,4 @@ else:
     a.exibir("Codificada", img, "{}".format(inp), 0)
     print("Mensagem decodificada:\n{}\n".format(decMsg))
 
-    a.exibirPlanos(img, inp)
+    a.exibirPlanos(img, inp, [0, 1, 2, 7])
