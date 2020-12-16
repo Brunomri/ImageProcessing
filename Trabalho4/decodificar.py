@@ -39,7 +39,7 @@ else:
 
     # Decodifica imagem
     decMsg = a.decodeMsg(img, nomeSaida, plano)
-    a.exibir("Codificada", img, "{}".format(inp), 0)
+    a.exibir("Codificada", img, "{}".format(inp))
     print("Mensagem decodificada:\n{}\n".format(decMsg))
 
     # Exibe os planos de bits

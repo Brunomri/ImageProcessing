@@ -173,5 +173,5 @@ def exibirPlanos(img, inp, planos = [0, 1, 2, 3, 4, 5, 6, 7]):
     # Exibe os planos de bits percorrendo cada plano e cada banda de cor
     for p in planos:
         for cor in ch:
-            exibir("Plano {} {}".format(p, cor), getPlano(ch.get(cor), p), "{}_{}_{}".format(p, cor, inp), 0)
+            exibir("Plano {} {}".format(p, cor), getPlano(ch.get(cor), p), "{}_{}_{}".format(p, cor, inp))
         cv.destroyAllWindows()
