@@ -39,9 +39,6 @@ python trabalho1.py <imagem.png>
 Parâmetros de execução:
 - imagem.png: caminho para um arquivo de imagem de entrada no formato .png
 
-Em ambos os modos, um arquivo results.csv é gerado no diretório raiz do projeto, contendo informações sobre a solução encontrada. Caso não exista
-solução para uma determinada combinação de instância e restrições, uma mensagem de erro aparecerá no console. A execução será abortada e nenhum resultado será armazenado.
-
 #### Trabalho 2
 
 ```
